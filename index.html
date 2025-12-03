@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maria's Portfolio - LXD and AI Strategist</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    // Обновленная минималистичная бирюзово-голубая палитра
+                    colors: {
+                        bg: '#F0FAFF', // Очень светлый бирюзово-голубой фон
+                        primary: '#00BCD4', // Основной акцент (Яркий циан/бирюзовый)
+                        secondary: '#0D47A1', // Дополнительный акцент (Темно-синий для контраста)
+                        dark: '#111827', // Темный текст/футер
+                        accent: '#4FC3F7', // Светло-голубой для выделения
+                    }
+                }
+            }
+        }
+
+        // Removed AI related functions (generateTextWithRetry, handleLlmQuery) as the assistant is removed.
+        
+        function toggleTestimonial(id) {
+            const card = document.getElementById(id);
+            const button = card.querySelector('.read-more-btn');
+            const isExpanded = card.classList.toggle('expanded');
+            button.textContent = isExpanded ? 'Read Less' : 'Read Full Testimonial';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctxNessa = document.getElementById('nessaChart').getContext('2d');
+            const nessaChart = new Chart(ctxNessa, {
+                type: 'bar',
+                data: {
+                    labels: ['Before', 'After'],
+                    datasets: [{
+                        label: 'Student Satisfaction Score (NESSA)',
+                        data: [53.1, 74.7],
+                        // Обновленные цвета для графика
+                        backgroundColor: ['rgba(207, 216, 220, 0.7)', 'rgba(0, 188, 212, 0.9)'],
+                        borderColor: ['rgba(207, 216, 220, 1)', 'rgba(0, 188, 212, 1)'],
+                        borderWidth: 1,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, max: 100, grid: { display: false } }, x: { grid: { display: false } } }
+                }
+            });
+        });
+    </script>
+
+    <style>
+        /* Бирюзово-голубой фон */
+        body { background-color: #F0FAFF; color: #1F2937; }
+        .chart-container { position: relative; width: 100%; max-width: 500px; margin: auto; height: 300px; max-height: 350px; }
+        .hover-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .hover-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
+        .testimonial-card { transition: all 0.5s ease-in-out; max-height: 230px; overflow: hidden; cursor: pointer; position: relative; }
+        .testimonial-card.expanded { max-height: 600px; }
+        /* Фон градиента изменен с белого на новый bg-цвет */
+        .testimonial-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 60px; background: linear-gradient(to top, #F0FAFF 50%, rgba(240, 250, 255, 0)); pointer-events: none; transition: opacity 0.3s ease; }
+        .testimonial-card.expanded .testimonial-fade { opacity: 0; }
+        .read-more-btn { position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); padding: 2px 10px; font-size: 0.75rem; line-height: 1rem; z-index: 10; }
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="font-bold text-xl text-primary"><i class="fa-solid fa-brain mr-2"></i>Maria's Portfolio</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#about" class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">About</a>
+                    <a href="#case1" class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Case 1: Product</a>
+                    <a href="#case2" class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Case 2: AI</a>
+                    <a href="#case3" class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Case 3: Engage</a>
+                    <a href="#global" class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Global</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-white border-b border-gray-100">
+        <div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8 flex flex-col items-center gap-10">
+            <div class="text-center md:w-full">
+                <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
+                    <span class="block">Maria Molokova</span>
+                    <span class="block text-primary">Senior LXD & AI Strategist</span>
+                </h1>
+                <p class="mt-4 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:max-w-3xl">
+                    Turning complex concepts into engaging, bite-sized learning experiences.
+                </p>
+                <div class="mt-8 flex justify-center gap-4">
+                    <!-- Обновлен цвет кнопки -->
+                    <a href="#about" class="flex items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 text-base font-medium text-white hover:bg-[#0097A7] md:py-4 md:px-10 md:text-lg shadow-lg hover:shadow-xl transition-all">
+                        See My Journey
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 2: About Me (The 30-Second Skim) -->
+    <section id="about" class="py-16 bg-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-base font-semibold text-primary tracking-wide uppercase">About Me</h2>
+                <p class="mt-2 text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">The 30-Second Skim</p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                    I sit at the intersection of Creative Arts, EdTech, and AI. With 10+ years in education, I don’t just write courses—I design experiences that stick.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Icon 1: Art/Education (Геометрия Баухаус: Квадрат и Круг) -->
+                <div class="bg-white p-8 rounded-xl shadow-md text-center hover-card">
+                    <div class="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-cyan-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="5" y="5" width="14" height="14" stroke-linecap="round" stroke-linejoin="round" />
+                            <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">15+ Years in Education</h3>
+                    <p class="text-gray-600">From Art Pedagogy to EdTech. I turn "boring" theory into interactive "learn-by-doing" scenarios.</p>
+                </div>
+
+                <!-- Icon 2: Tech/AI (Геометрия Баухаус: Поток данных/Соединение) -->
+                <div class="bg-white p-8 rounded-xl shadow-md text-center hover-card">
+                    <div class="w-16 h-16 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="3" width="8" height="8"/>
+                            <rect x="13" y="13" width="8" height="8"/>
+                            <line x1="11" y1="7" x2="13" y2="17"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">AI-Native & Tech</h3>
+                    <p class="text-gray-600">Currently building courses on Low-code (n8n, Agents) and AI for Developers (Cursor).</p>
+                </div>
+
+                <!-- Icon 3: Metrics (Геометрия Баухаус: График роста) -->
+                <div class="bg-white p-8 rounded-xl shadow-md text-center hover-card">
+                    <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <polyline points="21 16 14 9 9 14 3 8" />
+                            <circle cx="21" cy="16" r="1.5" fill="currentColor" stroke="none" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Metric-Obsessed</h3>
+                    <p class="text-gray-600">I design for NESSA, Retention, and ROI. My superpower is driving measurable growth.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 3: Case Study 1 — The "Product" Turnaround -->
+    <section id="case1" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-base font-semibold text-secondary tracking-wide uppercase">Case Study 1</h2>
+                <p class="mt-2 text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">The "Product" Turnaround</p>
+                <p class="mt-4 text-gray-500">Project: Higher Ed Product Relaunch (Skillfactory)</p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <!-- Text Content -->
+                <div class="lg:w-1/2">
+                    <div class="mb-6">
+                        <h4 class="text-lg font-bold text-red-500 mb-2"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Challenge</h4>
+                        <p class="text-gray-600">A high-stakes program suffered from low engagement (NESSA 53.1) and high operational costs.</p>
+                    </div>
+                    <div class="mb-6">
+                        <!-- Обновлен цвет -->
+                        <h4 class="text-lg font-bold text-primary mb-2"><i class="fa-solid fa-lightbulb mr-2"></i>Solution</h4>
+                        <ul class="list-disc pl-5 text-gray-600 space-y-2">
+                            <li><strong>Audit & Pivot:</strong> Identified disconnect between theory and practice.</li>
+                            <li><strong>Action:</strong> Shifted to Project-Based Learning (PBL). Redesigned webinars from "lectures" into interactive workshops.</li>
+                            <li><strong>Optimization:</strong> Streamlined homework review process to cut steps without losing quality.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Metrics Visualization -->
+                <div class="lg:w-1/2 bg-bg p-8 rounded-2xl border border-gray-100">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6 text-center">Key Results</h3>
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center border-b border-gray-200 pb-4">
+                            <span class="text-gray-600">Learning Satisfaction</span>
+                            <!-- Обновлен цвет -->
+                            <span class="text-2xl font-bold text-secondary">+40.7% <span class="text-sm text-gray-400 font-normal">(53.1 to 74.7)</span></span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-gray-200 pb-4">
+                            <span class="text-gray-600">Operational Expenses</span>
+                            <!-- Обновлен цвет -->
+                            <span class="text-2xl font-bold text-primary">-45% <span class="text-sm text-gray-400 font-normal">(Optimized)</span></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Profitability</span>
+                            <!-- Обновлен цвет -->
+                            <span class="text-2xl font-bold text-accent">98.8% <span class="text-sm text-gray-400 font-normal">(from 91.4%)</span></span>
+                        </div>
+                    </div>
+                    <!-- Small Chart -->
+                    <div class="mt-6 h-48">
+                        <canvas id="nessaChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 4: Case Study 2 — AI & Tech Integration -->
+    <section id="case2" class="py-16 bg-dark text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-base font-semibold text-accent tracking-wide uppercase">Case Study 2</h2>
+                <p class="mt-2 text-3xl font-bold leading-8 tracking-tight text-white sm:text-4xl">AI & Tech Integration</p>
+                <p class="mt-4 text-gray-400">Project: AI Integration & Tech Content Production</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="bg-gray-800 p-8 rounded-xl border border-gray-700">
+                    <h3 class="text-xl font-bold text-accent mb-4">The Solution</h3>
+                    <ul class="space-y-4 text-gray-300">
+                        <li class="flex items-start">
+                            <!-- Обновлен цвет иконки -->
+                            <i class="fa-solid fa-microchip mt-1 mr-3 text-accent"></i>
+                            <div><strong>AI Workflow:</strong> Integrated Neural Networks/LLMs into daily workflow for creating quizzes, summaries, and structure.</div>
+                        </li>
+                        <li class="flex items-start">
+                             <!-- Обновлен цвет иконки -->
+                            <i class="fa-solid fa-code mt-1 mr-3 text-accent"></i>
+                            <div><strong>Current Projects:</strong> Developing technical courses on Low-code for Business (GPT, Agents, Make) and AI for Developers (Cursor).</p></div>
+                        </li>
+                        <li class="flex items-start">
+                             <!-- Обновлен цвет иконки -->
+                            <i class="fa-solid fa-users-gear mt-1 mr-3 text-accent"></i>
+                            <div><strong>Community Upskilling:</strong> Led workshops for internal teams on "How to use AI in coordination and ops."</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="flex flex-col justify-center space-y-6">
+                    <div class="bg-gray-800 p-6 rounded-lg border-l-4 border-secondary">
+                        <h4 class="text-lg font-bold text-white">Result: Speed</h4>
+                        <p class="text-gray-400">Drastically reduced TTM (Time to Market) for new modules.</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg border-l-4 border-primary">
+                        <h4 class="text-lg font-bold text-white">Result: Culture</h4>
+                        <p class="text-gray-400">Built a culture of AI adoption within the team.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 5: Case Study 3 — Engagement & Storytelling -->
+    <section id="case3" class="py-16 bg-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-base font-semibold text-primary tracking-wide uppercase">Case Study 3</h2>
+                <p class="mt-2 text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">Engagement & Storytelling</p>
+                <p class="mt-4 text-gray-500">Project: "Authors" System & Podcast Collaboration</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="text-red-500 text-2xl mb-3"><i class="fa-solid fa-fire"></i></div>
+                    <h3 class="font-bold text-lg mb-2">The Challenge</h3>
+                    <p class="text-gray-600 text-sm">Expert content was dry, and Subject Matter Experts (SMEs) were burnt out or hard to manage.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <!-- Обновлен цвет иконки -->
+                    <div class="text-primary text-2xl mb-3"><i class="fa-solid fa-microphone-lines"></i></div>
+                    <h3 class="font-bold text-lg mb-2">The Solution</h3>
+                    <p class="text-gray-600 text-sm">Collaborated with "Either/Or" (Libo-Libo) podcast to mix technical theory with personal storytelling. Built a fun onboarding system for SMEs.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <!-- Обновлен цвет иконки -->
+                    <div class="text-secondary text-2xl mb-3"><i class="fa-solid fa-star"></i></div>
+                    <h3 class="font-bold text-lg mb-2">The Results</h3>
+                    <p class="text-gray-600 text-sm"><strong>100% Author NPS.</strong> Webinar attendance jumped from 1–2 students to <strong>15–20</strong> per session.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 6: English & International Experience -->
+    <section id="global" class="py-16 bg-white border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-gray-900">English & International Experience</h2>
+                <p class="mt-2 text-gray-600">Proving I can work effectively in your target language and markets.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-bg p-8 rounded-xl shadow-sm flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <!-- Обновлен цвет иконки -->
+                        <i class="fa-solid fa-flag-usa text-4xl text-primary"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900">US Market Strategy</h3>
+                        <p class="text-gray-600 mt-2">Conducted deep competitor research (Udemy, Domestika) for a US-focused design course to validate product-market fit.</p>
+                    </div>
+                </div>
+
+                <div class="bg-bg p-8 rounded-xl shadow-sm flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <!-- Обновлен цвет иконки -->
+                        <i class="fa-solid fa-earth-europe text-4xl text-secondary"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900">EU Collaboration</h3>
+                        <p class="text-gray-600 mt-2">Managed an exhibition project in Barcelona (Spain), navigating cultural differences and coordinating production in English.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-8">
+                <!-- Обновлен цвет плашки -->
+                <span class="inline-flex items-center px-4 py-2 rounded-full bg-secondary/20 text-secondary font-medium">
+                    <i class="fa-solid fa-check mr-2"></i> Bilingual Content Proficiency
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-16 bg-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-base font-semibold text-primary tracking-wide uppercase">Peer Reviews</h2>
+                <p class="mt-2 text-3xl font-bold text-gray-900">What People Say</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Обновлен цвет кнопки -->
+                <div id="t1" class="testimonial-card bg-white p-6 rounded-xl border hover:shadow-lg transition cursor-pointer" onclick="toggleTestimonial('t1')">
+                    <p class="italic text-gray-600">“Masha, it's a pleasure working with you—structured, consistent, responsible...”</p>
+                    <div class="mt-4 font-bold">- Ulyana Yarygina, Interior Designer</div>
+                    <button class="read-more-btn bg-primary/20 text-primary px-2 py-1 rounded text-xs mt-2">Read Full</button>
+                </div>
+                <!-- Обновлен цвет кнопки -->
+                <div id="t2" class="testimonial-card bg-white p-6 rounded-xl border hover:shadow-lg transition cursor-pointer" onclick="toggleTestimonial('t2')">
+                    <p class="italic text-gray-600">“I worked with Maria on a job search course... it's a 100% match. Masha is incredibly systemic...”</p>
+                    <div class="mt-4 font-bold">- Maria Bobyleva, HR BP</div>
+                    <button class="read-more-btn bg-primary/20 text-primary px-2 py-1 rounded text-xs mt-2">Read Full</button>
+                </div>
+                <!-- Обновлен цвет кнопки -->
+                <div id="t3" class="testimonial-card bg-white p-6 rounded-xl border hover:shadow-lg transition cursor-pointer" onclick="toggleTestimonial('t3')">
+                    <p class="italic text-gray-600">“Working with Masha was a pure pleasure—everything was clear, structured, and to the point...”</p>
+                    <div class="mt-4 font-bold">- Alina Panshina, Illustrator</div>
+                    <button class="read-more-btn bg-primary/20 text-primary px-2 py-1 rounded text-xs mt-2">Read Full</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-12 text-center">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-2xl font-bold mb-4">Let's build the future of AI learning.</h2>
+            <p class="text-gray-400 text-sm">© 2025 Maria's Portfolio.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
