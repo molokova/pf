@@ -549,12 +549,40 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-3">
-                    <input  class="form-input" type="text"  placeholder="Your name">
-                    <input  class="form-input" type="email" placeholder="Email">
-                    <textarea class="form-input" style="height:100px;resize:none;" placeholder="What are you working on?"></textarea>
-                    <button class="btn-primary self-start">Send message</button>
-                </div>
+                <form action="https://formspree.io/f/mgopvbpl" method="POST" class="flex flex-col gap-3" id="contact-form">
+                    <input  class="form-input" type="text"  name="name"    placeholder="Your name" required>
+                    <input  class="form-input" type="email" name="email"   placeholder="Email" required>
+                    <textarea class="form-input" name="message" style="height:100px;resize:none;" placeholder="What are you working on?" required></textarea>
+                    <button type="submit" class="btn-primary self-start" id="submit-btn">Send message</button>
+                    <p id="form-success" style="display:none; color:#85B7EB; font-size:13px;">✓ Message sent! I'll get back to you soon.</p>
+                    <p id="form-error"   style="display:none; color:#f87171; font-size:13px;">Something went wrong — please email me directly.</p>
+                </form>
+                <script>
+                    document.getElementById('contact-form').addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        const btn = document.getElementById('submit-btn');
+                        btn.textContent = 'Sending…';
+                        btn.disabled = true;
+                        try {
+                            const res = await fetch(this.action, {
+                                method: 'POST',
+                                body: new FormData(this),
+                                headers: { 'Accept': 'application/json' }
+                            });
+                            if (res.ok) {
+                                this.reset();
+                                document.getElementById('form-success').style.display = 'block';
+                                btn.style.display = 'none';
+                            } else {
+                                throw new Error();
+                            }
+                        } catch {
+                            document.getElementById('form-error').style.display = 'block';
+                            btn.textContent = 'Send message';
+                            btn.disabled = false;
+                        }
+                    });
+                </script>
 
             </div>
         </div>
