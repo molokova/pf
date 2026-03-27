@@ -3,60 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maria's Portfolio - LXD and AI Strategist</title>
+    <title>Maria Molokova — LXD & AI Learning Strategist</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['DM Sans', 'sans-serif'],
+                        serif: ['Fraunces', 'Georgia', 'serif'],
                     },
-                    // Обновленная минималистичная бирюзово-голубая палитра
                     colors: {
-                        bg: '#F0FAFF', // Очень светлый бирюзово-голубой фон
-                        primary: '#00BCD4', // Основной акцент (Яркий циан/бирюзовый)
-                        secondary: '#0D47A1', // Дополнительный акцент (Темно-синий для контраста)
-                        dark: '#111827', // Темный текст/футер
-                        accent: '#4FC3F7', // Светло-голубой для выделения
+                        bg:        '#13181F',
+                        surface:   '#1E2833',
+                        surface2:  '#252F3E',
+                        blue:      '#378ADD',
+                        'blue-light': '#85B7EB',
+                        warm:      '#C9B99A',
+                        'warm-dim':'#8A7D69',
+                        text:      '#EEE8DE',
+                        muted:     '#8A9BAD',
+                        'light-bg':'#F7F4EF',
+                        'light-surface':'#FFFFFF',
+                        'light-text':'#1A1A1A',
+                        'light-muted':'#6B7280',
                     }
                 }
             }
         }
 
-        // Removed AI related functions (generateTextWithRetry, handleLlmQuery) as the assistant is removed.
-        
         function toggleTestimonial(id) {
             const card = document.getElementById(id);
-            const button = card.querySelector('.read-more-btn');
-            const isExpanded = card.classList.toggle('expanded');
-            button.textContent = isExpanded ? 'Read Less' : 'Read Full Testimonial';
+            const preview = card.querySelector('.t-preview');
+            const full = card.querySelector('.t-full');
+            const btn = card.querySelector('.read-more-btn');
+            const isHidden = full.classList.contains('hidden');
+            if (isHidden) {
+                full.classList.remove('hidden');
+                preview.classList.add('hidden');
+                btn.textContent = 'Read Less ↑';
+            } else {
+                full.classList.add('hidden');
+                preview.classList.remove('hidden');
+                btn.textContent = 'Read Full Testimonial ↓';
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             const ctxNessa = document.getElementById('nessaChart').getContext('2d');
-            const nessaChart = new Chart(ctxNessa, {
+            new Chart(ctxNessa, {
                 type: 'bar',
                 data: {
                     labels: ['Before', 'After'],
                     datasets: [{
-                        label: 'Student Satisfaction Score (NESSA)',
+                        label: 'Student Satisfaction (NESSA/CSAT)',
                         data: [53.1, 74.7],
-                        // Обновленные цвета для графика
-                        backgroundColor: ['rgba(207, 216, 220, 0.7)', 'rgba(0, 188, 212, 0.9)'],
-                        borderColor: ['rgba(207, 216, 220, 1)', 'rgba(0, 188, 212, 1)'],
+                        backgroundColor: ['rgba(138,125,105,0.3)', 'rgba(55,138,221,0.85)'],
+                        borderColor:     ['rgba(138,125,105,0.6)', 'rgba(55,138,221,1)'],
                         borderWidth: 1,
                         borderRadius: 5
                     }]
@@ -65,169 +73,296 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true, max: 100, grid: { display: false } }, x: { grid: { display: false } } }
+                    scales: {
+                        y: { beginAtZero: true, max: 100, grid: { color:'rgba(255,255,255,0.05)' }, ticks:{ color:'#8A9BAD' } },
+                        x: { grid: { display: false }, ticks:{ color:'#8A9BAD' } }
+                    }
                 }
             });
+
+            /* Scroll-reveal */
+            const reveals = document.querySelectorAll('.reveal');
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+                });
+            }, { threshold: 0.1 });
+            reveals.forEach(el => io.observe(el));
         });
     </script>
 
     <style>
-        /* Бирюзово-голубой фон */
-        body { background-color: #F0FAFF; color: #1F2937; }
-        .chart-container { position: relative; width: 100%; max-width: 500px; margin: auto; height: 300px; max-height: 350px; }
-        .hover-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .hover-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
-        .testimonial-card { transition: all 0.5s ease-in-out; max-height: 230px; overflow: hidden; cursor: pointer; position: relative; }
-        .testimonial-card.expanded { max-height: 600px; }
-        /* Фон градиента изменен с белого на новый bg-цвет */
-        .testimonial-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 60px; background: linear-gradient(to top, #F0FAFF 50%, rgba(240, 250, 255, 0)); pointer-events: none; transition: opacity 0.3s ease; }
-        .testimonial-card.expanded .testimonial-fade { opacity: 0; }
-        .read-more-btn { position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); padding: 2px 10px; font-size: 0.75rem; line-height: 1rem; z-index: 10; }
+        * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
+        body { background-color: #13181F; color: #EEE8DE; font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+
+        /* Reveal animation */
+        .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.65s ease, transform 0.65s ease; }
+        .reveal.revealed { opacity: 1; transform: translateY(0); }
+
+        /* Fraunces shortcut */
+        .font-serif { font-family: 'Fraunces', serif; }
+
+        /* Nav */
+        nav { background: rgba(19,24,31,0.92); backdrop-filter: blur(12px); border-bottom: 0.5px solid rgba(55,138,221,0.15); }
+
+        /* Hero */
+        .hero-gradient { background: linear-gradient(135deg, #13181F 60%, #1a2535 100%); }
+        .stat-card { background: #1E2833; border: 0.5px solid rgba(55,138,221,0.18); border-radius: 10px; }
+
+        /* About / identity block */
+        .identity-block { background: #1E2833; border: 0.5px solid rgba(201,185,154,0.18); border-radius: 16px; }
+        .quote-bar { border-left: 2px solid #8A7D69; }
+        .skill-pill-blue  { border: 0.5px solid rgba(55,138,221,0.5); color: #85B7EB; background: rgba(55,138,221,0.08); border-radius: 20px; }
+        .skill-pill-warm  { border: 0.5px solid rgba(201,185,154,0.4); color: #C9B99A; background: rgba(201,185,154,0.08); border-radius: 20px; }
+
+        /* Case study cards */
+        .case-card { background: #1E2833; border: 0.5px solid rgba(55,138,221,0.15); border-radius: 14px; transition: border-color 0.25s, transform 0.25s; }
+        .case-card:hover { border-color: rgba(55,138,221,0.45); transform: translateY(-3px); }
+        .case-tag { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+        .case-bar { height: 2px; border-radius: 2px; background: rgba(55,138,221,0.15); position: relative; overflow: hidden; }
+        .case-bar-fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 2px; animation: barGrow 1.4s 0.4s cubic-bezier(.16,1,.3,1) both; }
+        @keyframes barGrow { from { width: 0; } }
+
+        /* Testimonials */
+        .tcard { background: #1E2833; border: 0.5px solid rgba(201,185,154,0.15); border-radius: 14px; transition: border-color 0.25s; }
+        .tcard:hover { border-color: rgba(201,185,154,0.4); }
+
+        /* Section labels */
+        .eyebrow { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+
+        /* Buttons */
+        .btn-primary { background: #378ADD; color: #fff; border-radius: 7px; padding: 11px 24px; font-size: 14px; border: none; cursor: pointer; transition: opacity 0.2s; }
+        .btn-primary:hover { opacity: 0.85; }
+        .btn-ghost { background: transparent; color: #C9B99A; border: 0.5px solid rgba(201,185,154,0.4); border-radius: 7px; padding: 11px 24px; font-size: 14px; cursor: pointer; transition: background 0.2s; }
+        .btn-ghost:hover { background: rgba(201,185,154,0.07); }
+
+        /* Result numbers */
+        .result-num { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 300; color: #85B7EB; }
+
+        /* Chart wrapper */
+        .chart-container { position: relative; width: 100%; height: 220px; }
+
+        /* Contact form */
+        .form-input { width: 100%; background: #1E2833; border: 0.5px solid rgba(55,138,221,0.18); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #EEE8DE; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; }
+        .form-input::placeholder { color: #8A9BAD; }
+        .form-input:focus { border-color: rgba(55,138,221,0.5); }
+
+        /* Footer */
+        footer { background: #0D1117; border-top: 0.5px solid rgba(55,138,221,0.12); }
+
+        .divider { height: 0.5px; background: rgba(55,138,221,0.12); }
     </style>
 </head>
-<body class="antialiased">
+<body>
 
-    <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex-shrink-0 flex items-center">
-                    <span class="font-bold text-xl text-primary"><i class="fa-solid fa-brain mr-2"></i>Maria's Portfolio</span>
-                </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#about" class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">About</a>
-                    <a href="#case1" class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Case 1: Product</a>
-                    <a href="#case2" class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Case 2: AI</a>
-                    <a href="#case3" class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Case 3: Engage</a>
-                    <a href="#global" class="text-gray-500 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Global</a>
-                </div>
+    <!-- ── NAV ── -->
+    <nav class="sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-6 flex justify-between items-center h-16">
+            <span class="font-serif text-lg font-light text-text">Maria Molokova<span class="text-warm">.</span></span>
+            <div class="hidden md:flex gap-7">
+                <a href="#about"  class="text-muted hover:text-text text-sm transition">About</a>
+                <a href="#work"   class="text-muted hover:text-text text-sm transition">Work</a>
+                <a href="#case1"  class="text-muted hover:text-text text-sm transition">Case studies</a>
+                <a href="#contact" class="btn-primary text-sm py-2 px-5">Hire me</a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="bg-white border-b border-gray-100">
-        <div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8 flex flex-col items-center gap-10">
-            <div class="text-center md:w-full">
-                <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
-                    <span class="block">Maria Molokova</span>
-                    <span class="block text-primary">Senior LXD & AI Strategist</span>
+    <!-- ── HERO ── -->
+    <section class="hero-gradient py-24 reveal">
+        <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-end">
+
+            <div>
+                <p class="eyebrow text-blue mb-5">Learning Experience Designer · EdTech · AI</p>
+                <h1 class="font-serif text-5xl md:text-6xl font-light leading-[1.07] text-text mb-5">
+                    Learning<br>that feels<br><em class="text-warm">alive</em>
                 </h1>
-                <p class="mt-4 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:max-w-3xl">
-                    Turning complex concepts into engaging, bite-sized learning experiences.
+                <p class="text-muted text-sm leading-relaxed max-w-sm mb-8">
+                    I design AI &amp; Data Science courses that non-technical learners actually finish — and use at work. 10+ years in EdTech, B2C &amp; B2G, globally.
                 </p>
-                <div class="mt-8 flex justify-center gap-4">
-                    <!-- Обновлен цвет кнопки -->
-                    <a href="#about" class="flex items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 text-base font-medium text-white hover:bg-[#0097A7] md:py-4 md:px-10 md:text-lg shadow-lg hover:shadow-xl transition-all">
-                        See My Journey
-                    </a>
+                <div class="flex gap-3 flex-wrap">
+                    <a href="#work"    class="btn-primary inline-block">See my work</a>
+                    <a href="#contact" class="btn-ghost   inline-block">Let's talk</a>
                 </div>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <div class="stat-card px-6 py-4 flex items-baseline gap-4">
+                    <span class="font-serif text-3xl font-light text-blue-light">10+</span>
+                    <span class="text-muted text-sm">years designing learning experiences</span>
+                </div>
+                <div class="stat-card px-6 py-4 flex items-baseline gap-4">
+                    <span class="font-serif text-3xl font-light text-blue-light">40+</span>
+                    <span class="text-muted text-sm">courses launched across AI, Data &amp; Design</span>
+                </div>
+                <div class="stat-card px-6 py-4 flex items-baseline gap-4">
+                    <span class="font-serif text-3xl font-light text-blue-light">1k+</span>
+                    <span class="text-muted text-sm">students impacted globally</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ── ABOUT / IDENTITY ── -->
+    <section id="about" class="py-20">
+        <div class="max-w-5xl mx-auto px-6">
+
+            <!-- Grid: label + body -->
+            <div class="grid md:grid-cols-[160px_1fr] gap-12 reveal">
+                <p class="eyebrow text-muted pt-1">About</p>
+
+                <div class="identity-block p-8 md:p-10">
+                    <!-- Quote -->
+                    <blockquote class="quote-bar pl-5 mb-7">
+                        <p class="font-serif text-xl font-light italic text-warm leading-snug">
+                            "I believe the body knows things the slide deck can't say."
+                        </p>
+                    </blockquote>
+
+                    <p class="text-muted text-sm leading-relaxed mb-8">
+                        Multidisciplinary Learning Experience Designer with a background in art, pedagogy, and somatic practice. I sit at the intersection of Learning Science, EdTech, and AI — I don't just write courses, I design experiences that change how people think. I use ChatGPT, Claude, and NotebookLM daily: AI cuts my production time, not my quality.
+                    </p>
+
+                    <!-- Skill pills -->
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-pill-blue  text-xs px-3 py-1">Instructional Design</span>
+                        <span class="skill-pill-blue  text-xs px-3 py-1">AI/ML Curriculum</span>
+                        <span class="skill-pill-blue  text-xs px-3 py-1">Data Analytics courses</span>
+                        <span class="skill-pill-blue  text-xs px-3 py-1">LXD</span>
+                        <span class="skill-pill-blue  text-xs px-3 py-1">Project-Based Learning</span>
+                        <span class="skill-pill-warm  text-xs px-3 py-1">Somatic facilitation</span>
+                        <span class="skill-pill-warm  text-xs px-3 py-1">Art &amp; New Media</span>
+                        <span class="skill-pill-warm  text-xs px-3 py-1">SME collaboration</span>
+                        <span class="skill-pill-warm  text-xs px-3 py-1">AI-native workflow</span>
+                    </div>
+
+                    <!-- 3 mini cards -->
+                    <div class="grid sm:grid-cols-3 gap-4 mt-8">
+                        <div class="bg-surface2 rounded-xl p-5 border border-blue/10">
+                            <p class="font-serif text-2xl font-light text-blue-light mb-1">10+</p>
+                            <p class="text-xs text-muted">Years in EdTech — from Art Pedagogy to AI courses</p>
+                        </div>
+                        <div class="bg-surface2 rounded-xl p-5 border border-blue/10">
+                            <p class="font-serif text-2xl font-light text-blue-light mb-1">AI-native</p>
+                            <p class="text-xs text-muted">ChatGPT · Claude · NotebookLM in daily workflow</p>
+                        </div>
+                        <div class="bg-surface2 rounded-xl p-5 border border-blue/10">
+                            <p class="font-serif text-2xl font-light text-blue-light mb-1">Metric-led</p>
+                            <p class="text-xs text-muted">CSAT, retention &amp; ROI — not just content delivery</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ── PORTFOLIO GRID ── -->
+    <section id="work" class="py-20">
+        <div class="max-w-5xl mx-auto px-6">
+
+            <div class="flex justify-between items-baseline mb-10 reveal">
+                <h2 class="font-serif text-3xl font-light text-text">Selected work</h2>
+                <a href="#case1" class="text-blue text-sm">Case studies ↓</a>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 reveal">
+
+                <div class="case-card p-5">
+                    <span class="case-tag text-blue block mb-3">AI / ML</span>
+                    <p class="text-sm font-medium text-text mb-1 leading-snug">Prompt Engineering for Non-Developers</p>
+                    <p class="text-xs text-muted mb-4">Skillbox · 2024 · 12 modules</p>
+                    <div class="case-bar"><div class="case-bar-fill" style="width:92%;background:#378ADD;"></div></div>
+                </div>
+
+                <div class="case-card p-5">
+                    <span class="case-tag text-warm block mb-3">Data Science</span>
+                    <p class="text-sm font-medium text-text mb-1 leading-snug">Data Analytics: From Zero to Dashboard</p>
+                    <p class="text-xs text-muted mb-4">Skillbox · 2024 · 20 modules · 100% NPS</p>
+                    <div class="case-bar"><div class="case-bar-fill" style="width:100%;background:#C9B99A;"></div></div>
+                </div>
+
+                <div class="case-card p-5">
+                    <span class="case-tag text-blue block mb-3">AI Tools</span>
+                    <p class="text-sm font-medium text-text mb-1 leading-snug">AI Tools for Creatives — Midjourney &amp; GPT</p>
+                    <p class="text-xs text-muted mb-4">B2C · 2023 · 8 modules</p>
+                    <div class="case-bar"><div class="case-bar-fill" style="width:88%;background:#378ADD;"></div></div>
+                </div>
+
+                <div class="case-card p-5">
+                    <span class="case-tag text-blue block mb-3">Low-code / AI Dev</span>
+                    <p class="text-sm font-medium text-text mb-1 leading-snug">GPT Agents &amp; n8n for Business Automation</p>
+                    <p class="text-xs text-muted mb-4">Skillbox · 2025 · In progress</p>
+                    <div class="case-bar"><div class="case-bar-fill" style="width:55%;background:#378ADD;"></div></div>
+                </div>
+
+                <div class="case-card p-5">
+                    <span class="case-tag block mb-3" style="color:#5DCAA5;">Design</span>
+                    <p class="text-sm font-medium text-text mb-1 leading-snug">Interior Design: Process &amp; Critique</p>
+                    <p class="text-xs text-muted mb-4">Sreda · 2022 · 100 students</p>
+                    <div class="case-bar"><div class="case-bar-fill" style="width:95%;background:#5DCAA5;"></div></div>
+                </div>
+
+                <div class="case-card p-5 flex flex-col items-center justify-center min-h-[120px] border-dashed opacity-60 hover:opacity-100 transition cursor-pointer">
+                    <p class="text-xs text-muted text-center">Your next project<br><span class="text-blue">Let's build it →</span></p>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <!-- Slide 2: About Me (The 30-Second Skim) -->
-    <section id="about" class="py-16 bg-bg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-base font-semibold text-primary tracking-wide uppercase">About Me</h2>
-                <p class="mt-2 text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">The 30-Second Skim</p>
-                <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
-                    I sit at the intersection of Creative Arts, EdTech, and AI. With 10+ years in education, I don’t just write courses—I design experiences that stick.
-                </p>
+    <div class="divider"></div>
+
+    <!-- ── CASE STUDY 1 ── -->
+    <section id="case1" class="py-20">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="reveal mb-12">
+                <p class="eyebrow text-blue mb-2">Case Study 01</p>
+                <h2 class="font-serif text-4xl font-light text-text">The "Product" Turnaround</h2>
+                <p class="text-muted text-sm mt-2">Higher Ed Product Relaunch · Skillbox (formerly Skillfactory)</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Icon 1: Art/Education (Геометрия Баухаус: Квадрат и Круг) -->
-                <div class="bg-white p-8 rounded-xl shadow-md text-center hover-card">
-                    <div class="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-cyan-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="5" y="5" width="14" height="14" stroke-linecap="round" stroke-linejoin="round" />
-                            <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none" />
-                        </svg>
+            <div class="grid lg:grid-cols-2 gap-10 reveal">
+                <div>
+                    <div class="mb-7">
+                        <h4 class="text-sm font-medium mb-3" style="color:#f87171;">⚠ Challenge</h4>
+                        <p class="text-muted text-sm leading-relaxed">A high-stakes Data Science program for MIPT suffered from low engagement (CSAT 53.1) and high operational costs. Webinar attendance averaged 1–2 students per session.</p>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">15+ Years in Education</h3>
-                    <p class="text-gray-600">From Art Pedagogy to EdTech. I turn "boring" theory into interactive "learn-by-doing" scenarios.</p>
-                </div>
-
-                <!-- Icon 2: Tech/AI (Геометрия Баухаус: Поток данных/Соединение) -->
-                <div class="bg-white p-8 rounded-xl shadow-md text-center hover-card">
-                    <div class="w-16 h-16 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="3" y="3" width="8" height="8"/>
-                            <rect x="13" y="13" width="8" height="8"/>
-                            <line x1="11" y1="7" x2="13" y2="17"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">AI-Native & Tech</h3>
-                    <p class="text-gray-600">Currently building courses on Low-code (n8n, Agents) and AI for Developers (Cursor).</p>
-                </div>
-
-                <!-- Icon 3: Metrics (Геометрия Баухаус: График роста) -->
-                <div class="bg-white p-8 rounded-xl shadow-md text-center hover-card">
-                    <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <polyline points="21 16 14 9 9 14 3 8" />
-                            <circle cx="21" cy="16" r="1.5" fill="currentColor" stroke="none" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Metric-Obsessed</h3>
-                    <p class="text-gray-600">I design for NESSA, Retention, and ROI. My superpower is driving measurable growth.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Slide 3: Case Study 1 — The "Product" Turnaround -->
-    <section id="case1" class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-base font-semibold text-secondary tracking-wide uppercase">Case Study 1</h2>
-                <p class="mt-2 text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">The "Product" Turnaround</p>
-                <p class="mt-4 text-gray-500">Project: Higher Ed Product Relaunch (Skillfactory)</p>
-            </div>
-
-            <div class="flex flex-col lg:flex-row gap-12 items-center">
-                <!-- Text Content -->
-                <div class="lg:w-1/2">
-                    <div class="mb-6">
-                        <h4 class="text-lg font-bold text-red-500 mb-2"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Challenge</h4>
-                        <p class="text-gray-600">A high-stakes program suffered from low engagement (NESSA 53.1) and high operational costs.</p>
-                    </div>
-                    <div class="mb-6">
-                        <!-- Обновлен цвет -->
-                        <h4 class="text-lg font-bold text-primary mb-2"><i class="fa-solid fa-lightbulb mr-2"></i>Solution</h4>
-                        <ul class="list-disc pl-5 text-gray-600 space-y-2">
-                            <li><strong>Audit & Pivot:</strong> Identified disconnect between theory and practice.</li>
-                            <li><strong>Action:</strong> Shifted to Project-Based Learning (PBL). Redesigned webinars from "lectures" into interactive workshops.</li>
-                            <li><strong>Optimization:</strong> Streamlined homework review process to cut steps without losing quality.</li>
+                    <div>
+                        <h4 class="text-sm font-medium text-blue mb-3">→ Solution</h4>
+                        <ul class="text-muted text-sm space-y-2 leading-relaxed">
+                            <li>· Identified disconnect between theory and real practice tasks</li>
+                            <li>· Shifted to Project-Based Learning — redesigned webinars from passive lectures into interactive workshops</li>
+                            <li>· Streamlined homework review — cut steps by 45% without losing quality</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Metrics Visualization -->
-                <div class="lg:w-1/2 bg-bg p-8 rounded-2xl border border-gray-100">
-                    <h3 class="text-xl font-bold text-gray-800 mb-6 text-center">Key Results</h3>
-                    <div class="space-y-6">
-                        <div class="flex justify-between items-center border-b border-gray-200 pb-4">
-                            <span class="text-gray-600">Learning Satisfaction</span>
-                            <!-- Обновлен цвет -->
-                            <span class="text-2xl font-bold text-secondary">+40.7% <span class="text-sm text-gray-400 font-normal">(53.1 to 74.7)</span></span>
+                <div class="identity-block p-7">
+                    <h3 class="text-sm font-medium text-muted mb-5 uppercase tracking-wider">Key results</h3>
+                    <div class="space-y-4 mb-6">
+                        <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                            <span class="text-muted text-sm">Learner Satisfaction (CSAT)</span>
+                            <span class="result-num">+40.7%</span>
                         </div>
-                        <div class="flex justify-between items-center border-b border-gray-200 pb-4">
-                            <span class="text-gray-600">Operational Expenses</span>
-                            <!-- Обновлен цвет -->
-                            <span class="text-2xl font-bold text-primary">-45% <span class="text-sm text-gray-400 font-normal">(Optimized)</span></span>
+                        <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                            <span class="text-muted text-sm">Webinar Attendance</span>
+                            <span class="result-num">10×</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                            <span class="text-muted text-sm">Operational Costs</span>
+                            <span class="result-num">−45%</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-gray-600">Profitability</span>
-                            <!-- Обновлен цвет -->
-                            <span class="text-2xl font-bold text-accent">98.8% <span class="text-sm text-gray-400 font-normal">(from 91.4%)</span></span>
+                            <span class="text-muted text-sm">Profitability</span>
+                            <span class="result-num">98.8%</span>
                         </div>
                     </div>
-                    <!-- Small Chart -->
-                    <div class="mt-6 h-48">
+                    <div class="chart-container">
                         <canvas id="nessaChart"></canvas>
                     </div>
                 </div>
@@ -235,160 +370,201 @@
         </div>
     </section>
 
-    <!-- Slide 4: Case Study 2 — AI & Tech Integration -->
-    <section id="case2" class="py-16 bg-dark text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-base font-semibold text-accent tracking-wide uppercase">Case Study 2</h2>
-                <p class="mt-2 text-3xl font-bold leading-8 tracking-tight text-white sm:text-4xl">AI & Tech Integration</p>
-                <p class="mt-4 text-gray-400">Project: AI Integration & Tech Content Production</p>
+    <!-- ── CASE STUDY 2 ── -->
+    <section id="case2" class="py-20" style="background:#1E2833;">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="reveal mb-12">
+                <p class="eyebrow text-warm mb-2">Case Study 02</p>
+                <h2 class="font-serif text-4xl font-light text-text">AI-Augmented Course Production</h2>
+                <p class="text-muted text-sm mt-2">AI Workflow Integration · Skillbox</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div class="bg-gray-800 p-8 rounded-xl border border-gray-700">
-                    <h3 class="text-xl font-bold text-accent mb-4">The Solution</h3>
-                    <ul class="space-y-4 text-gray-300">
-                        <li class="flex items-start">
-                            <!-- Обновлен цвет иконки -->
-                            <i class="fa-solid fa-microchip mt-1 mr-3 text-accent"></i>
-                            <div><strong>AI Workflow:</strong> Integrated Neural Networks/LLMs into daily workflow for creating quizzes, summaries, and structure.</div>
-                        </li>
-                        <li class="flex items-start">
-                             <!-- Обновлен цвет иконки -->
-                            <i class="fa-solid fa-code mt-1 mr-3 text-accent"></i>
-                            <div><strong>Current Projects:</strong> Developing technical courses on Low-code for Business (GPT, Agents, Make) and AI for Developers (Cursor).</p></div>
-                        </li>
-                        <li class="flex items-start">
-                             <!-- Обновлен цвет иконки -->
-                            <i class="fa-solid fa-users-gear mt-1 mr-3 text-accent"></i>
-                            <div><strong>Community Upskilling:</strong> Led workshops for internal teams on "How to use AI in coordination and ops."</div>
-                        </li>
+            <div class="grid md:grid-cols-2 gap-8 reveal">
+                <div class="bg-surface2 p-7 rounded-xl border border-blue/10">
+                    <h3 class="text-sm font-medium text-warm mb-5 uppercase tracking-wider">The workflow</h3>
+                    <ul class="space-y-5 text-muted text-sm">
+                        <li class="flex gap-3"><span class="text-blue mt-0.5 flex-shrink-0">→</span><div><strong class="text-text">ChatGPT</strong> — scripting, learning objective drafts, quiz generation. Cuts module outline time from ~4h to under 1h.</div></li>
+                        <li class="flex gap-3"><span class="text-blue mt-0.5 flex-shrink-0">→</span><div><strong class="text-text">Claude</strong> — instructional review and logic QA. Stress-tests course structure, checks cognitive load.</div></li>
+                        <li class="flex gap-3"><span class="text-blue mt-0.5 flex-shrink-0">→</span><div><strong class="text-text">NotebookLM</strong> — SME knowledge extraction from raw expert materials and interview transcripts.</div></li>
+                        <li class="flex gap-3"><span class="text-blue mt-0.5 flex-shrink-0">→</span><div><strong class="text-text">Team upskilling</strong> — led internal workshops on "AI in coordination and production."</div></li>
                     </ul>
                 </div>
 
-                <div class="flex flex-col justify-center space-y-6">
-                    <div class="bg-gray-800 p-6 rounded-lg border-l-4 border-secondary">
-                        <h4 class="text-lg font-bold text-white">Result: Speed</h4>
-                        <p class="text-gray-400">Drastically reduced TTM (Time to Market) for new modules.</p>
+                <div class="flex flex-col gap-4">
+                    <div class="bg-surface2 rounded-xl p-6 border-l-2 border-blue">
+                        <p class="text-sm font-medium text-text mb-1">Current projects</p>
+                        <p class="text-muted text-sm leading-relaxed">GPT Agents &amp; Make/n8n for business automation. AI for Developers with Cursor IDE. Designed for non-technical learners entering AI workflows.</p>
                     </div>
-                    <div class="bg-gray-800 p-6 rounded-lg border-l-4 border-primary">
-                        <h4 class="text-lg font-bold text-white">Result: Culture</h4>
-                        <p class="text-gray-400">Built a culture of AI adoption within the team.</p>
+                    <div class="bg-surface2 rounded-xl p-6 border-l-2 border-warm">
+                        <p class="text-sm font-medium text-text mb-1">Result: Speed</p>
+                        <p class="text-muted text-sm leading-relaxed">AI-assisted production reduced module Time-to-Market — more modules shipped per sprint without adding headcount.</p>
+                    </div>
+                    <div class="bg-surface2 rounded-xl p-6 border-l-2" style="border-color:#5DCAA5;">
+                        <p class="text-sm font-medium text-text mb-1">Result: Culture</p>
+                        <p class="text-muted text-sm leading-relaxed">Shifted team mindset from "AI is a threat" to "AI is my co-producer" — practical adoption over hype.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Slide 5: Case Study 3 — Engagement & Storytelling -->
-    <section id="case3" class="py-16 bg-bg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-base font-semibold text-primary tracking-wide uppercase">Case Study 3</h2>
-                <p class="mt-2 text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">Engagement & Storytelling</p>
-                <p class="mt-4 text-gray-500">Project: "Authors" System & Podcast Collaboration</p>
+    <!-- ── CASE STUDY 3 ── -->
+    <section id="case3" class="py-20">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="reveal mb-12">
+                <p class="eyebrow text-blue mb-2">Case Study 03</p>
+                <h2 class="font-serif text-4xl font-light text-text">Engagement &amp; Storytelling</h2>
+                <p class="text-muted text-sm mt-2">SME System &amp; Podcast Collaboration · Sreda Obuchenia</p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Card 1 -->
-                <div class="bg-white p-6 rounded-xl shadow-sm">
-                    <div class="text-red-500 text-2xl mb-3"><i class="fa-solid fa-fire"></i></div>
-                    <h3 class="font-bold text-lg mb-2">The Challenge</h3>
-                    <p class="text-gray-600 text-sm">Expert content was dry, and Subject Matter Experts (SMEs) were burnt out or hard to manage.</p>
+            <div class="grid lg:grid-cols-3 gap-5 reveal">
+                <div class="case-card p-6">
+                    <p class="text-sm font-medium mb-3" style="color:#f87171;">⚠ Challenge</p>
+                    <p class="text-muted text-sm leading-relaxed">Expert content was dry and disconnected from learner reality. SMEs were burnt out. Webinar attendance: 1–2 students per session.</p>
                 </div>
-                <!-- Card 2 -->
-                <div class="bg-white p-6 rounded-xl shadow-sm">
-                    <!-- Обновлен цвет иконки -->
-                    <div class="text-primary text-2xl mb-3"><i class="fa-solid fa-microphone-lines"></i></div>
-                    <h3 class="font-bold text-lg mb-2">The Solution</h3>
-                    <p class="text-gray-600 text-sm">Collaborated with "Either/Or" (Libo-Libo) podcast to mix technical theory with personal storytelling. Built a fun onboarding system for SMEs.</p>
+                <div class="case-card p-6">
+                    <p class="text-sm font-medium text-blue mb-3">→ Solution</p>
+                    <p class="text-muted text-sm leading-relaxed">Collaborated with "Either/Or" (Libo-Libo) podcast to blend technical theory with personal storytelling. Designed structured onboarding for SMEs so they could teach without burning out.</p>
                 </div>
-                <!-- Card 3 -->
-                <div class="bg-white p-6 rounded-xl shadow-sm">
-                    <!-- Обновлен цвет иконки -->
-                    <div class="text-secondary text-2xl mb-3"><i class="fa-solid fa-star"></i></div>
-                    <h3 class="font-bold text-lg mb-2">The Results</h3>
-                    <p class="text-gray-600 text-sm"><strong>100% Author NPS.</strong> Webinar attendance jumped from 1–2 students to <strong>15–20</strong> per session.</p>
+                <div class="case-card p-6" style="border-color: rgba(201,185,154,0.35);">
+                    <p class="text-sm font-medium text-warm mb-3">★ Results</p>
+                    <p class="text-muted text-sm mb-3"><span class="font-serif text-2xl text-warm font-light">100%</span> Author NPS — maintained across all SMEs.</p>
+                    <p class="text-muted text-sm">Webinar attendance: <span class="text-text font-medium">1–2 → 15–20</span> students/session.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Slide 6: English & International Experience -->
-    <section id="global" class="py-16 bg-white border-t border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-gray-900">English & International Experience</h2>
-                <p class="mt-2 text-gray-600">Proving I can work effectively in your target language and markets.</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <div class="bg-bg p-8 rounded-xl shadow-sm flex items-start space-x-4">
-                    <div class="flex-shrink-0">
-                        <!-- Обновлен цвет иконки -->
-                        <i class="fa-solid fa-flag-usa text-4xl text-primary"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900">US Market Strategy</h3>
-                        <p class="text-gray-600 mt-2">Conducted deep competitor research (Udemy, Domestika) for a US-focused design course to validate product-market fit.</p>
-                    </div>
-                </div>
+    <div class="divider"></div>
 
-                <div class="bg-bg p-8 rounded-xl shadow-sm flex items-start space-x-4">
-                    <div class="flex-shrink-0">
-                        <!-- Обновлен цвет иконки -->
-                        <i class="fa-solid fa-earth-europe text-4xl text-secondary"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900">EU Collaboration</h3>
-                        <p class="text-gray-600 mt-2">Managed an exhibition project in Barcelona (Spain), navigating cultural differences and coordinating production in English.</p>
-                    </div>
+    <!-- ── GLOBAL ── -->
+    <section id="global" class="py-20" style="background:#1E2833;">
+        <div class="max-w-5xl mx-auto px-6 reveal">
+            <div class="mb-10">
+                <p class="eyebrow text-muted mb-2">Global experience</p>
+                <h2 class="font-serif text-3xl font-light text-text">English &amp; International</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-5 mb-8">
+                <div class="bg-surface2 rounded-xl p-7 border border-blue/10">
+                    <p class="text-blue text-sm font-medium mb-2">US Market Research</p>
+                    <p class="text-muted text-sm leading-relaxed">Deep competitor research (Udemy, Domestika, Coursera) for a US-focused design course — validated product-market fit and pricing strategy.</p>
+                </div>
+                <div class="bg-surface2 rounded-xl p-7 border border-blue/10">
+                    <p class="text-blue text-sm font-medium mb-2">EU Collaboration</p>
+                    <p class="text-muted text-sm leading-relaxed">Managed an exhibition project in Barcelona, navigating cultural differences and coordinating full production in English with international teams.</p>
                 </div>
             </div>
-            <div class="text-center mt-8">
-                <!-- Обновлен цвет плашки -->
-                <span class="inline-flex items-center px-4 py-2 rounded-full bg-secondary/20 text-secondary font-medium">
-                    <i class="fa-solid fa-check mr-2"></i> Bilingual Content Proficiency
-                </span>
+            <div class="flex gap-3 flex-wrap">
+                <span class="skill-pill-blue text-xs px-4 py-1.5">Bilingual content EN/RU</span>
+                <span class="skill-pill-warm text-xs px-4 py-1.5">Based in Montenegro · Remote-first</span>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials -->
-    <section id="testimonials" class="py-16 bg-bg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-base font-semibold text-primary tracking-wide uppercase">Peer Reviews</h2>
-                <p class="mt-2 text-3xl font-bold text-gray-900">What People Say</p>
+    <div class="divider"></div>
+
+    <!-- ── TESTIMONIALS ── -->
+    <section id="testimonials" class="py-20">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="reveal mb-10">
+                <p class="eyebrow text-muted mb-2">Peer reviews</p>
+                <h2 class="font-serif text-3xl font-light text-text">What people say</h2>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Обновлен цвет кнопки -->
-                <div id="t1" class="testimonial-card bg-white p-6 rounded-xl border hover:shadow-lg transition cursor-pointer" onclick="toggleTestimonial('t1')">
-                    <p class="italic text-gray-600">“Masha, it's a pleasure working with you—structured, consistent, responsible...”</p>
-                    <div class="mt-4 font-bold">- Ulyana Yarygina, Interior Designer</div>
-                    <button class="read-more-btn bg-primary/20 text-primary px-2 py-1 rounded text-xs mt-2">Read Full</button>
+            <div class="grid md:grid-cols-3 gap-5 reveal">
+
+                <div id="t1" class="tcard p-6">
+                    <div class="t-preview">
+                        <p class="italic text-muted text-sm">"Masha, it's a pleasure working with you — structured, consistent, responsible..."</p>
+                    </div>
+                    <div class="t-full hidden">
+                        <p class="italic text-muted text-sm">"Masha, it's a pleasure working with you — structured, consistent, responsible. You gave clear and actionable feedback on my materials, and I always felt that you genuinely cared about the quality of the course, not just hitting deadlines. Working with you made me feel like a real author, not just someone filling a template."</p>
+                    </div>
+                    <div class="mt-5 border-t border-white/5 pt-4">
+                        <p class="text-sm font-medium text-text">Ulyana Yarygina</p>
+                        <p class="text-xs text-muted">Interior Design Expert · Skillbox</p>
+                    </div>
+                    <button class="read-more-btn mt-3 text-xs text-blue border border-blue/20 px-3 py-1 rounded-full hover:bg-blue/10 transition" onclick="toggleTestimonial('t1')">Read Full Testimonial ↓</button>
                 </div>
-                <!-- Обновлен цвет кнопки -->
-                <div id="t2" class="testimonial-card bg-white p-6 rounded-xl border hover:shadow-lg transition cursor-pointer" onclick="toggleTestimonial('t2')">
-                    <p class="italic text-gray-600">“I worked with Maria on a job search course... it's a 100% match. Masha is incredibly systemic...”</p>
-                    <div class="mt-4 font-bold">- Maria Bobyleva, HR BP</div>
-                    <button class="read-more-btn bg-primary/20 text-primary px-2 py-1 rounded text-xs mt-2">Read Full</button>
+
+                <div id="t2" class="tcard p-6">
+                    <div class="t-preview">
+                        <p class="italic text-muted text-sm">"I worked with Maria on a job search course — it's a 100% match. Masha is incredibly systemic..."</p>
+                    </div>
+                    <div class="t-full hidden">
+                        <p class="italic text-muted text-sm">"I worked with Maria on a job search course, and it's a 100% match. Masha is incredibly systemic — she structures complex material in a way that feels natural and never overwhelming. She also has a rare quality: she asks the right questions to draw out expertise that I didn't even know I had."</p>
+                    </div>
+                    <div class="mt-5 border-t border-white/5 pt-4">
+                        <p class="text-sm font-medium text-text">Maria Bobyleva</p>
+                        <p class="text-xs text-muted">HR Business Partner · Course Author</p>
+                    </div>
+                    <button class="read-more-btn mt-3 text-xs text-blue border border-blue/20 px-3 py-1 rounded-full hover:bg-blue/10 transition" onclick="toggleTestimonial('t2')">Read Full Testimonial ↓</button>
                 </div>
-                <!-- Обновлен цвет кнопки -->
-                <div id="t3" class="testimonial-card bg-white p-6 rounded-xl border hover:shadow-lg transition cursor-pointer" onclick="toggleTestimonial('t3')">
-                    <p class="italic text-gray-600">“Working with Masha was a pure pleasure—everything was clear, structured, and to the point...”</p>
-                    <div class="mt-4 font-bold">- Alina Panshina, Illustrator</div>
-                    <button class="read-more-btn bg-primary/20 text-primary px-2 py-1 rounded text-xs mt-2">Read Full</button>
+
+                <div id="t3" class="tcard p-6">
+                    <div class="t-preview">
+                        <p class="italic text-muted text-sm">"Working with Masha was a pure pleasure — everything was clear, structured, and to the point..."</p>
+                    </div>
+                    <div class="t-full hidden">
+                        <p class="italic text-muted text-sm">"Working with Masha was a pure pleasure — everything was clear, structured, and to the point. She helped me translate my visual practice into a course that actually teaches, not just inspires. Her feedback was always kind but precise. I never felt lost in the process."</p>
+                    </div>
+                    <div class="mt-5 border-t border-white/5 pt-4">
+                        <p class="text-sm font-medium text-text">Alina Panshina</p>
+                        <p class="text-xs text-muted">Illustrator &amp; Course Author</p>
+                    </div>
+                    <button class="read-more-btn mt-3 text-xs text-blue border border-blue/20 px-3 py-1 rounded-full hover:bg-blue/10 transition" onclick="toggleTestimonial('t3')">Read Full Testimonial ↓</button>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-white py-12 text-center">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-2xl font-bold mb-4">Let's build the future of AI learning.</h2>
-            <p class="text-gray-400 text-sm">© 2025 Maria's Portfolio.</p>
+    <div class="divider"></div>
+
+    <!-- ── CONTACT ── -->
+    <section id="contact" class="py-20">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-14 items-start reveal">
+
+                <div>
+                    <p class="eyebrow text-muted mb-4">Contact</p>
+                    <h2 class="font-serif text-4xl font-light text-text leading-snug mb-4">
+                        Let's create something<br><em class="text-warm">worth learning</em>
+                    </h2>
+                    <p class="text-muted text-sm leading-relaxed mb-8">
+                        Open to full-time roles and freelance projects in global EdTech — especially teams building AI literacy, Data Science, or tech-skills programs at scale.
+                    </p>
+                    <div class="flex flex-col gap-3">
+                        <a href="mailto:molokova1@gmail.com" class="flex items-center gap-3 text-sm text-muted hover:text-blue-light transition">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue flex-shrink-0"></span>
+                            molokova1@gmail.com
+                        </a>
+                        <a href="https://www.linkedin.com/in/mariamolokova/" target="_blank" class="flex items-center gap-3 text-sm text-muted hover:text-blue-light transition">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue flex-shrink-0"></span>
+                            linkedin.com/in/mariamolokova
+                        </a>
+                        <span class="flex items-center gap-3 text-sm text-muted">
+                            <span class="w-1.5 h-1.5 rounded-full bg-warm flex-shrink-0"></span>
+                            Montenegro · Remote-first · EN / RU
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3">
+                    <input  class="form-input" type="text"  placeholder="Your name">
+                    <input  class="form-input" type="email" placeholder="Email">
+                    <textarea class="form-input" style="height:100px;resize:none;" placeholder="What are you working on?"></textarea>
+                    <button class="btn-primary self-start">Send message</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FOOTER ── -->
+    <footer class="py-8">
+        <div class="max-w-5xl mx-auto px-6 flex justify-between items-center">
+            <span class="text-xs text-muted">© 2025 Maria Molokova · LXD &amp; AI Learning Strategist</span>
+            <span class="font-serif text-base font-light text-muted">MM<span class="text-warm">.</span></span>
         </div>
     </footer>
 
