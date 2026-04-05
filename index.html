@@ -3,16 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- OG / Social preview -->
-<meta property="og:title" content="Maria Molokova — LXD & AI Learning Strategist">
-<meta property="og:description" content="Learning that feels alive. I design AI & Data Science experiences that non-technical people actually finish.">
-<meta property="og:image" content="https://molokova.github.io/pf/og-image.jpg">
-<meta property="og:url" content="https://molokova.github.io/pf/">
-<meta property="og:type" content="website">
-
-<!-- Twitter/X card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://molokova.github.io/pf/og-image.jpg">
 <title>Maria Molokova — LXD & AI Learning Strategist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -264,6 +254,94 @@ nav {
 /* Holo spill shared */
 .holo-spill { position: absolute; pointer-events: none; overflow: hidden; }
 .deco-cymatics { opacity: 0.22; }
+
+/* ══════════════════════════════
+   MOBILE — ≤768px
+══════════════════════════════ */
+@media (max-width: 768px) {
+
+  .nav-inner { padding: 0 24px; }
+  .nav-links li:not(:last-child) { display: none; }
+  .nav-links .nav-cta { padding: 7px 16px; font-size: 12px; }
+
+  .container { padding: 0 24px; }
+  .section-pad { padding: 72px 0; }
+
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 100px 24px 48px;
+    min-height: auto;
+    gap: 0;
+  }
+  .hero-h1 { font-size: clamp(44px, 12vw, 64px); margin-bottom: 20px; }
+  .hero-sub { font-size: 16px; max-width: 100%; margin-bottom: 32px; }
+  .hero-ctas { gap: 8px; }
+  .btn-fill, .btn-stroke { padding: 12px 22px; font-size: 13px; }
+  .hero-sphere { justify-content: center; margin-top: 40px; padding-bottom: 8px; }
+  .blob-outer { width: 300px; height: 290px; margin-right: 0; }
+
+  .about-grid { grid-template-columns: 1fr; gap: 36px; }
+  .about-hed-wrap { position: static; }
+  .about-hed-wrap .deco-cymatics { display: none; }
+  .about-body p { font-size: 16px; }
+  .pull { font-size: 19px; }
+
+  .cards-wrap { grid-template-columns: 1fr; }
+  .card { padding: 32px 24px; }
+
+  .portfolio-grid { grid-template-columns: 1fr 1fr; }
+  .p-card { padding: 22px 18px; }
+  .p-card-title { font-size: 13px; }
+
+  .tl-phase { grid-template-columns: 1fr; gap: 20px; padding: 36px 0; }
+  .tl-year { font-size: 22px; }
+  .tl-phase-label { display: none; }
+  .tl-row { grid-template-columns: 1fr; }
+  .tl-card { padding: 22px 20px; }
+  .tl-title { font-size: 14px; }
+  .tl-metric-val { font-size: 20px; }
+
+  .cs-grid-2 { grid-template-columns: 1fr; gap: 32px; }
+  .cs-grid-3 { grid-template-columns: 1fr; }
+  .cs-box { padding: 24px 20px; }
+  .cs-card { padding: 24px 20px; }
+  .cs-result-val { font-size: 22px; }
+  .cs-side-card { padding: 18px 20px; }
+  .cs-list-text { font-size: 14px; }
+  .cs-body-text { font-size: 15px; }
+  .chart-container { height: 160px; }
+
+  .global-cards { grid-template-columns: 1fr; }
+  .global-card { padding: 24px 20px; }
+
+  .sme-grid { grid-template-columns: 1fr; gap: 36px; }
+  .sme-hed-wrap { position: static; }
+  .sme-hed-wrap .deco-cymatics { display: none; }
+  .sme-body p { font-size: 16px; }
+  .sme-testi-quote { font-size: 15px; }
+  .sme-testimonials { margin-top: 0; }
+
+  .contact { padding: 72px 0 56px; }
+  .contact-hed { font-size: clamp(34px, 9vw, 52px); }
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .contact-sub { font-size: 15px; }
+  .btn-pale, .btn-ghost { padding: 12px 22px; font-size: 13px; }
+
+  .footer-line { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .footer-links { flex-wrap: wrap; gap: 16px; }
+
+  .section-hed { font-size: clamp(30px, 8vw, 44px); }
+  .tcard-wrap { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .portfolio-grid { grid-template-columns: 1fr; }
+  .hero-ctas { flex-direction: column; align-items: flex-start; }
+  .blob-outer { width: 260px; height: 250px; }
+  .tl-metric-row { gap: 16px; }
+  .tl-left { display: flex; align-items: baseline; gap: 16px; }
+  .tl-wave { margin-bottom: 0; }
+}
 </style>
 </head>
 <body>
