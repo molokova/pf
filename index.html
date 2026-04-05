@@ -1,600 +1,1057 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maria Molokova — LXD & AI Learning Strategist</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maria Molokova — LXD & AI Learning Strategist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['DM Sans', 'sans-serif'],
-                        serif: ['Fraunces', 'Georgia', 'serif'],
-                    },
-                    colors: {
-                        bg:        '#13181F',
-                        surface:   '#1E2833',
-                        surface2:  '#252F3E',
-                        blue:      '#378ADD',
-                        'blue-light': '#85B7EB',
-                        warm:      '#C9B99A',
-                        'warm-dim':'#8A7D69',
-                        text:      '#EEE8DE',
-                        muted:     '#8A9BAD',
-                        'light-bg':'#F7F4EF',
-                        'light-surface':'#FFFFFF',
-                        'light-text':'#1A1A1A',
-                        'light-muted':'#6B7280',
-                    }
-                }
-            }
-        }
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        function toggleTestimonial(id) {
-            const card = document.getElementById(id);
-            const preview = card.querySelector('.t-preview');
-            const full = card.querySelector('.t-full');
-            const btn = card.querySelector('.read-more-btn');
-            const isHidden = full.classList.contains('hidden');
-            if (isHidden) {
-                full.classList.remove('hidden');
-                preview.classList.add('hidden');
-                btn.textContent = 'Read Less ↑';
-            } else {
-                full.classList.add('hidden');
-                preview.classList.remove('hidden');
-                btn.textContent = 'Read Full Testimonial ↓';
-            }
-        }
+:root {
+  --bg:       #ECEAE6;
+  --bg-2:     #E2DED8;
+  --bg-dark:  #141210;
+  --text:     #1A1814;
+  --text-2:   #5A5650;
+  --text-3:   #8A8680;
+  --blue:     #2B58E8;
+  --blue-dim: #EEF1FD;
+  --teal:     #1D9E75;
+  --border:   rgba(26,24,20,0.10);
+  --border-2: rgba(26,24,20,0.18);
+}
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const ctxNessa = document.getElementById('nessaChart').getContext('2d');
-            new Chart(ctxNessa, {
-                type: 'bar',
-                data: {
-                    labels: ['Before', 'After'],
-                    datasets: [{
-                        label: 'Student Satisfaction (NESSA/CSAT)',
-                        data: [53.1, 74.7],
-                        backgroundColor: ['rgba(138,125,105,0.3)', 'rgba(55,138,221,0.85)'],
-                        borderColor:     ['rgba(138,125,105,0.6)', 'rgba(55,138,221,1)'],
-                        borderWidth: 1,
-                        borderRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: { beginAtZero: true, max: 100, grid: { color:'rgba(255,255,255,0.05)' }, ticks:{ color:'#8A9BAD' } },
-                        x: { grid: { display: false }, ticks:{ color:'#8A9BAD' } }
-                    }
-                }
-            });
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-weight: 300;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
 
-            /* Scroll-reveal */
-            const reveals = document.querySelectorAll('.reveal');
-            const io = new IntersectionObserver((entries) => {
-                entries.forEach(e => {
-                    if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
-                });
-            }, { threshold: 0.1 });
-            reveals.forEach(el => io.observe(el));
-        });
-    </script>
+/* ── SVG DEFS ── */
+.svg-defs { position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none; }
 
-    <style>
-        * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { background-color: #13181F; color: #EEE8DE; font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: 16px 0;
+  background: rgba(236,234,230,0.90);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-bottom: 0.5px solid var(--border);
+}
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 52px; display: flex; align-items: center; justify-content: space-between; }
+.nav-logo { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 18px; color: var(--text); text-decoration: none; }
+.nav-logo span { color: var(--blue); }
+.nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+.nav-links a { font-size: 13px; font-weight: 300; color: var(--text-2); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--blue); }
+.nav-links .nav-cta {
+  padding: 8px 20px; background: var(--blue); color: #fff;
+  border-radius: 2px; font-size: 13px; font-weight: 400; letter-spacing: 0.04em;
+  text-decoration: none; transition: background 0.2s;
+}
+.nav-links .nav-cta:hover { background: #1C48D8; color: #fff; }
 
-        /* Reveal animation */
-        .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.65s ease, transform 0.65s ease; }
-        .reveal.revealed { opacity: 1; transform: translateY(0); }
+/* ── HERO ── */
+.hero {
+  min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center; max-width: 1200px; margin: 0 auto;
+  padding: 100px 52px 80px; gap: 40px; overflow: visible;
+}
+.hero-eyebrow { font-size: 11px; font-weight: 400; letter-spacing: 0.20em; text-transform: uppercase; color: var(--blue); margin-bottom: 24px; opacity: 0; animation: riseIn 0.7s ease 0.1s forwards; }
+.hero-h1 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(52px, 5.5vw, 78px); line-height: 1.04; letter-spacing: -0.025em; color: var(--text); margin-bottom: 30px; opacity: 0; animation: riseIn 0.8s ease 0.25s forwards; }
+.hero-sub { font-size: 17px; font-weight: 300; color: var(--text-2); line-height: 1.68; max-width: 400px; margin-bottom: 44px; opacity: 0; animation: riseIn 0.8s ease 0.4s forwards; }
+.hero-ctas { display: flex; gap: 10px; flex-wrap: wrap; opacity: 0; animation: riseIn 0.8s ease 0.55s forwards; }
 
-        /* Fraunces shortcut */
-        .font-serif { font-family: 'Fraunces', serif; }
+/* ── BLOB ── */
+.hero-sphere { display: flex; align-items: center; justify-content: flex-end; overflow: visible; opacity: 0; animation: riseIn 1.1s ease 0.3s forwards; }
+.blob-outer { position: relative; width: 560px; height: 540px; flex-shrink: 0; margin-right: -48px; }
+.blob-glow { position: absolute; inset: -50px; background: radial-gradient(ellipse at 48% 50%, rgba(238,175,190,0.28) 0%, rgba(175,195,228,0.16) 45%, transparent 70%); filter: blur(36px); animation: blobMorph 18s ease-in-out infinite; pointer-events: none; }
+#holo-canvas { width: 100%; height: 100%; border-radius: 68% 32% 82% 18% / 46% 72% 28% 54%; animation: blobMorph 18s ease-in-out infinite; display: block; }
+@keyframes blobMorph {
+  0%,100% { border-radius: 68% 32% 82% 18% / 46% 72% 28% 54%; }
+  16%     { border-radius: 44% 56% 52% 48% / 72% 36% 64% 28%; }
+  33%     { border-radius: 80% 20% 46% 54% / 30% 70% 42% 58%; }
+  50%     { border-radius: 52% 48% 68% 32% / 60% 44% 70% 30%; }
+  66%     { border-radius: 34% 66% 36% 64% / 66% 34% 58% 42%; }
+  83%     { border-radius: 62% 38% 54% 46% / 42% 62% 34% 66%; }
+}
 
-        /* Nav */
-        nav { background: rgba(19,24,31,0.92); backdrop-filter: blur(12px); border-bottom: 0.5px solid rgba(55,138,221,0.15); }
+/* ── SHARED ── */
+.section-pad { padding: 120px 0; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 52px; }
+.overline { font-size: 11px; font-weight: 400; letter-spacing: 0.20em; text-transform: uppercase; color: var(--blue); margin-bottom: 20px; }
+.section-hed { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(36px, 3.8vw, 54px); line-height: 1.08; letter-spacing: -0.022em; color: var(--text); }
+.hairline { border: none; border-top: 0.5px solid var(--border); max-width: 1200px; margin: 0 auto; }
 
-        /* Hero */
-        .hero-gradient { background: linear-gradient(135deg, #13181F 60%, #1a2535 100%); }
-        .stat-card { background: #1E2833; border: 0.5px solid rgba(55,138,221,0.18); border-radius: 10px; }
+/* ── BUTTONS ── */
+.btn-fill { display: inline-block; padding: 13px 30px; background: var(--blue); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 400; letter-spacing: 0.05em; text-decoration: none; border: 1.5px solid var(--blue); border-radius: 2px; transition: background 0.2s; cursor: pointer; }
+.btn-fill:hover { background: #1C48D8; border-color: #1C48D8; }
+.btn-stroke { display: inline-block; padding: 13px 30px; background: transparent; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 400; letter-spacing: 0.05em; text-decoration: none; border: 1.5px solid var(--border-2); border-radius: 2px; transition: border-color 0.2s, color 0.2s; }
+.btn-stroke:hover { border-color: var(--blue); color: var(--blue); }
 
-        /* About / identity block */
-        .identity-block { background: #1E2833; border: 0.5px solid rgba(201,185,154,0.18); border-radius: 16px; }
-        .quote-bar { border-left: 2px solid #8A7D69; }
-        .skill-pill-blue  { border: 0.5px solid rgba(55,138,221,0.5); color: #85B7EB; background: rgba(55,138,221,0.08); border-radius: 20px; }
-        .skill-pill-warm  { border: 0.5px solid rgba(201,185,154,0.4); color: #C9B99A; background: rgba(201,185,154,0.08); border-radius: 20px; }
+/* ── ABOUT ── */
+.about-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; align-items: start; }
+.about-hed-wrap { position: sticky; top: 110px; }
+.about-body { display: flex; flex-direction: column; gap: 28px; padding-top: 6px; }
+.about-body p { font-size: 17px; font-weight: 300; line-height: 1.78; color: var(--text-2); }
+.about-body p strong { color: var(--text); font-weight: 400; }
+.about-body p em { font-style: italic; color: var(--text); }
+.pull { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 23px; line-height: 1.35; color: var(--text); border-left: 1.5px solid var(--blue); padding-left: 24px; margin: 4px 0; }
 
-        /* Case study cards */
-        .case-card { background: #1E2833; border: 0.5px solid rgba(55,138,221,0.15); border-radius: 14px; transition: border-color 0.25s, transform 0.25s; }
-        .case-card:hover { border-color: rgba(55,138,221,0.45); transform: translateY(-3px); }
-        .case-tag { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
-        .case-bar { height: 2px; border-radius: 2px; background: rgba(55,138,221,0.15); position: relative; overflow: hidden; }
-        .case-bar-fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 2px; animation: barGrow 1.4s 0.4s cubic-bezier(.16,1,.3,1) both; }
-        @keyframes barGrow { from { width: 0; } }
+/* Skill pills */
+.pills-wrap { display: flex; flex-wrap: wrap; gap: 7px; padding-top: 8px; }
+.pill-blue { font-size: 11px; padding: 4px 12px; border-radius: 20px; border: 0.5px solid rgba(43,88,232,0.35); color: var(--blue); background: var(--blue-dim); font-weight: 400; }
+.pill-warm { font-size: 11px; padding: 4px 12px; border-radius: 20px; border: 0.5px solid rgba(26,24,20,0.18); color: var(--text-2); background: var(--bg-2); font-weight: 400; }
 
-        /* Testimonials */
-        .tcard { background: #1E2833; border: 0.5px solid rgba(201,185,154,0.15); border-radius: 14px; transition: border-color 0.25s; }
-        .tcard:hover { border-color: rgba(201,185,154,0.4); }
+/* ── TIMELINE ── */
+.tl-wrap { display: flex; flex-direction: column; gap: 0; }
+.tl-phase { display: grid; grid-template-columns: 200px 1fr; gap: 48px; align-items: start; padding: 48px 0; }
+.tl-left { padding-top: 4px; }
+.tl-year { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 28px; color: var(--text); letter-spacing: -0.02em; margin-bottom: 10px; }
+.tl-wave { width: 48px; height: 20px; display: block; margin-bottom: 10px; }
+.tl-phase-label { font-size: 12px; color: var(--text-3); line-height: 1.5; font-weight: 300; }
+.tl-right { display: flex; flex-direction: column; gap: 0; }
+.tl-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
+.tl-card { background: var(--bg); padding: 28px 28px; position: relative; transition: background 0.2s; }
+.tl-card:hover { background: var(--bg-2); }
+.tl-card-featured { background: var(--bg); }
+.tl-card-featured::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--blue); }
+.tl-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.tl-tag { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 400; padding: 3px 9px; border-radius: 20px; border: 0.5px solid; white-space: nowrap; }
+.tl-scope { font-size: 11px; color: var(--text-3); font-weight: 300; }
+.tl-title { font-size: 15px; font-weight: 400; color: var(--text); line-height: 1.45; margin-bottom: 14px; }
+.tl-note { font-size: 13px; color: var(--text-3); line-height: 1.6; font-weight: 300; }
+.tl-metric-row { display: flex; gap: 24px; margin-top: 4px; }
+.tl-metric { display: flex; flex-direction: column; gap: 2px; }
+.tl-metric-val { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 300; color: var(--text); letter-spacing: -0.02em; line-height: 1; }
+.tl-metric-lab { font-size: 11px; color: var(--text-3); font-weight: 300; }
+.tl-divider { padding: 0; overflow: hidden; }
+.tl-divider svg { width: 100%; height: 12px; display: block; }
+.cards-wrap { margin-top: 52px; display: grid; grid-template-columns: repeat(3, 1fr); }
+.card { padding: 44px 40px; border: 0.5px solid var(--border-2); position: relative; }
+.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: transparent; transition: background 0.3s; }
+.card:hover::before { background: var(--blue); }
+.card-n { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blue); margin-bottom: 22px; font-weight: 400; }
+.card-hed { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 22px; line-height: 1.22; color: var(--text); margin-bottom: 18px; }
+.card-p { font-size: 15px; font-weight: 300; color: var(--text-2); line-height: 1.72; }
 
-        /* Section labels */
-        .eyebrow { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+/* ── PORTFOLIO GRID ── */
+.portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-top: 52px; }
+.p-card { background: var(--bg); padding: 32px 28px; position: relative; transition: background 0.2s; }
+.p-card:hover { background: var(--bg-2); }
+.p-card-tag { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 400; display: block; margin-bottom: 14px; }
+.p-card-title { font-size: 15px; font-weight: 400; color: var(--text); line-height: 1.4; margin-bottom: 6px; }
+.p-card-meta { font-size: 12px; color: var(--text-3); margin-bottom: 18px; }
+.p-bar { height: 1.5px; background: var(--border); border-radius: 2px; position: relative; overflow: hidden; }
+.p-bar-fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 2px; animation: barGrow 1.4s 0.4s cubic-bezier(.16,1,.3,1) both; }
+@keyframes barGrow { from { width: 0; } }
+.p-card-ghost { display: flex; align-items: center; justify-content: center; min-height: 140px; border: 0.5px dashed var(--border-2); background: transparent; }
 
-        /* Buttons */
-        .btn-primary { background: #378ADD; color: #fff; border-radius: 7px; padding: 11px 24px; font-size: 14px; border: none; cursor: pointer; transition: opacity 0.2s; }
-        .btn-primary:hover { opacity: 0.85; }
-        .btn-ghost { background: transparent; color: #C9B99A; border: 0.5px solid rgba(201,185,154,0.4); border-radius: 7px; padding: 11px 24px; font-size: 14px; cursor: pointer; transition: background 0.2s; }
-        .btn-ghost:hover { background: rgba(201,185,154,0.07); }
+/* ── CASE STUDIES ── */
+.cs-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+.cs-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+.cs-card { background: var(--bg); padding: 40px 36px; }
+.cs-box { background: var(--bg-2); border: 0.5px solid var(--border-2); border-radius: 4px; padding: 36px; }
+.cs-result-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 0.5px solid var(--border); padding: 14px 0; }
+.cs-result-row:last-child { border-bottom: none; }
+.cs-result-label { font-size: 14px; color: var(--text-2); }
+.cs-result-val { font-family: 'Fraunces', serif; font-weight: 300; font-size: 28px; color: var(--blue); letter-spacing: -0.02em; }
+.chart-container { position: relative; width: 100%; height: 200px; margin-top: 28px; }
+.cs-list { display: flex; flex-direction: column; gap: 18px; }
+.cs-list-item { display: flex; gap: 14px; }
+.cs-list-arrow { color: var(--blue); font-size: 14px; flex-shrink: 0; padding-top: 1px; }
+.cs-list-text { font-size: 15px; color: var(--text-2); line-height: 1.65; }
+.cs-list-text strong { color: var(--text); font-weight: 400; }
+.cs-side-card { padding: 24px 28px; border-left: 2px solid var(--border-2); margin-bottom: 16px; }
+.cs-side-card:last-child { margin-bottom: 0; }
+.cs-side-card.blue-accent { border-left-color: var(--blue); }
+.cs-side-card.warm-accent { border-left-color: #C4A882; }
+.cs-side-card.teal-accent { border-left-color: var(--teal); }
+.cs-side-title { font-size: 14px; font-weight: 400; color: var(--text); margin-bottom: 6px; }
+.cs-side-p { font-size: 14px; color: var(--text-2); line-height: 1.62; }
+.cs-wave-label { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.cs-wave-label span { font-size: 13px; font-weight: 400; }
+.cs-wave-label.challenge span { color: #B04A28; }
+.cs-wave-label.solution span  { color: var(--blue); }
+.cs-wave-label.result span    { color: #7A6040; }
+.cs-body-text { font-size: 15px; color: var(--text-2); line-height: 1.68; }
 
-        /* Result numbers */
-        .result-num { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 300; color: #85B7EB; }
+/* ── GLOBAL ── */
+.global-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); margin-top: 40px; }
+.global-card { background: var(--bg-2); padding: 36px 32px; }
+.global-card-title { font-size: 14px; font-weight: 400; color: var(--blue); margin-bottom: 10px; }
 
-        /* Chart wrapper */
-        .chart-container { position: relative; width: 100%; height: 220px; }
+/* ── SME ── */
+.sme-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; align-items: start; }
+.sme-hed-wrap { position: sticky; top: 110px; }
+.sme-body { display: flex; flex-direction: column; gap: 0; padding-top: 6px; }
+.sme-body p { font-size: 17px; font-weight: 300; line-height: 1.78; color: var(--text-2); margin-bottom: 24px; }
+.sme-body p strong { color: var(--text); font-weight: 400; }
+.sme-cta-note { font-size: 15px; font-weight: 300; color: var(--text-3); border-top: 0.5px solid var(--border); padding-top: 20px; margin-bottom: 44px; font-style: italic; }
 
-        /* Contact form */
-        .form-input { width: 100%; background: #1E2833; border: 0.5px solid rgba(55,138,221,0.18); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #EEE8DE; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; }
-        .form-input::placeholder { color: #8A9BAD; }
-        .form-input:focus { border-color: rgba(55,138,221,0.5); }
+/* Testimonials (expandable) — original section */
+.tcard { background: var(--bg); padding: 36px 32px; position: relative; }
+.tcard-quote { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 15px; line-height: 1.65; color: var(--text-2); margin-bottom: 20px; }
+.tcard-author-name { font-size: 13px; font-weight: 400; color: var(--text); }
+.tcard-author-role { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+.tcard-border { border-top: 0.5px solid var(--border); margin: 16px 0; }
+.read-more-btn { font-size: 11px; color: var(--blue); background: var(--blue-dim); border: 0.5px solid rgba(43,88,232,0.25); border-radius: 20px; padding: 3px 10px; cursor: pointer; margin-top: 10px; transition: background 0.2s; font-family: 'DM Sans', sans-serif; }
+.read-more-btn:hover { background: rgba(43,88,232,0.12); }
 
-        /* Footer */
-        footer { background: #0D1117; border-top: 0.5px solid rgba(55,138,221,0.12); }
+/* SME testimonials (stacked) */
+.sme-testimonials { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
+.sme-testi { background: var(--bg); padding: 32px 36px; }
+.sme-testi-quote { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 17px; line-height: 1.65; color: var(--text); margin-bottom: 20px; }
+.sme-testi-quote::before { content: '\201C'; font-size: 42px; line-height: 0.6; color: var(--blue); opacity: 0.22; display: block; margin-bottom: 10px; }
+.testi-author { display: flex; align-items: center; gap: 12px; }
+.testi-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--blue-dim); border: 0.5px solid rgba(43,88,232,0.25); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--blue); flex-shrink: 0; }
+.testi-name { font-size: 13px; font-weight: 400; color: var(--text); }
+.testi-role { font-size: 12px; color: var(--text-3); margin-top: 1px; }
 
-        .divider { height: 0.5px; background: rgba(55,138,221,0.12); }
-    </style>
+/* ── CONTACT ── */
+.contact { background: var(--bg-dark); padding: 140px 0 100px; }
+.contact .overline { color: rgba(200,190,180,0.35); }
+.contact-hed { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(42px, 5vw, 68px); line-height: 1.06; letter-spacing: -0.025em; color: #F0EDE8; margin: 18px 0 26px; }
+.contact-sub { font-size: 16px; font-weight: 300; line-height: 1.72; color: rgba(240,237,232,0.48); max-width: 560px; margin-bottom: 20px; }
+.contact-info-row { display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(240,237,232,0.55); margin-bottom: 10px; text-decoration: none; transition: color 0.2s; }
+.contact-info-row:hover { color: rgba(240,237,232,0.90); }
+.contact-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+
+/* Form */
+.form-input { width: 100%; background: rgba(255,255,255,0.06); border: 0.5px solid rgba(240,237,232,0.18); border-radius: 2px; padding: 13px 16px; font-size: 14px; color: #F0EDE8; font-family: 'DM Sans', sans-serif; font-weight: 300; outline: none; transition: border-color 0.2s; }
+.form-input::placeholder { color: rgba(240,237,232,0.28); }
+.form-input:focus { border-color: rgba(240,237,232,0.45); }
+.form-wrap { display: flex; flex-direction: column; gap: 10px; }
+
+/* Footer line */
+.footer-line { margin-top: 80px; padding-top: 28px; border-top: 0.5px solid rgba(240,237,232,0.10); display: flex; justify-content: space-between; align-items: center; }
+.footer-copy { font-size: 12px; color: rgba(240,237,232,0.25); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { font-size: 12px; color: rgba(240,237,232,0.28); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: rgba(240,237,232,0.65); }
+
+/* Pale/ghost buttons for dark bg */
+.btn-pale { display: inline-block; padding: 13px 30px; background: #F0EDE8; color: var(--bg-dark); font-size: 13px; font-weight: 400; letter-spacing: 0.05em; text-decoration: none; border: 1.5px solid #F0EDE8; border-radius: 2px; transition: background 0.2s; cursor: pointer; }
+.btn-pale:hover { background: #fff; }
+.btn-ghost { display: inline-block; padding: 13px 30px; background: transparent; color: rgba(240,237,232,0.75); font-size: 13px; font-weight: 400; letter-spacing: 0.05em; text-decoration: none; border: 1.5px solid rgba(240,237,232,0.22); border-radius: 2px; transition: border-color 0.2s, color 0.2s; }
+.btn-ghost:hover { border-color: rgba(240,237,232,0.55); color: #F0EDE8; }
+
+/* ── ANIMATIONS ── */
+@keyframes riseIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+.reveal-d1 { transition-delay: 0.1s; }
+.reveal-d2 { transition-delay: 0.2s; }
+.reveal-d3 { transition-delay: 0.3s; }
+
+/* Holo spill shared */
+.holo-spill { position: absolute; pointer-events: none; overflow: hidden; }
+.deco-cymatics { opacity: 0.22; }
+</style>
 </head>
 <body>
 
-    <!-- ── NAV ── -->
-    <nav class="sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-6 flex justify-between items-center h-16">
-            <span class="font-serif text-lg font-light text-text">Maria Molokova<span class="text-warm">.</span></span>
-            <div class="hidden md:flex gap-7">
-                <a href="#about"  class="text-muted hover:text-text text-sm transition">About</a>
-                <a href="#work"   class="text-muted hover:text-text text-sm transition">Work</a>
-                <a href="#case1"  class="text-muted hover:text-text text-sm transition">Case studies</a>
-                <a href="#contact" class="btn-primary text-sm py-2 px-5">Hire me</a>
-            </div>
+<svg class="svg-defs" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="grain-f" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.68" numOctaves="4" stitchTiles="stitch" result="noise"/>
+      <feColorMatrix type="matrix" values="3.5 0 0 0 -1.1  0 3.5 0 0 -1.1  0 0 3.5 0 -1.1  0 0 0 18 -8" in="noise" result="boosted"/>
+      <feBlend in="SourceGraphic" in2="boosted" mode="overlay" result="blend"/>
+      <feComposite in="blend" in2="SourceGraphic" operator="in"/>
+    </filter>
+  </defs>
+</svg>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Maria Molokova<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#approach">Approach</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#case1">Case studies</a></li>
+      <li><a href="#authors">Authors</a></li>
+      <li><a href="#contact" class="nav-cta">Hire me</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<div style="max-width:1200px;margin:0 auto;overflow:hidden;">
+  <div class="hero">
+    <div class="hero-text">
+      <p class="hero-eyebrow">Maria Molokova</p>
+      <h1 class="hero-h1">Learning<br>that feels<br>alive.</h1>
+      <p class="hero-sub">I design AI &amp; Data Science learning experiences that non-technical people actually finish — and remember when it matters at work.</p>
+      <div class="hero-ctas">
+        <a href="#work" class="btn-fill">See My Work</a>
+        <a href="#contact" class="btn-stroke">Contact Me</a>
+      </div>
+    </div>
+    <div class="hero-sphere">
+      <div class="blob-outer">
+        <div class="blob-glow"></div>
+        <canvas id="holo-canvas" width="560" height="540"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ABOUT ═══ -->
+<section class="section-pad" id="about" style="background:var(--bg);">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <div class="about-hed-wrap">
+          <div class="overline reveal reveal-d1">About</div>
+          <h2 class="section-hed reveal reveal-d2" style="margin-top:18px;">Learning<br>isn't transferred.<br>It's ignited.</h2>
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:190px;height:190px;margin-top:52px;" class="deco-cymatics" aria-hidden="true">
+            <g fill="none" stroke="#1A1814" stroke-width="1.2">
+              <circle cx="100" cy="100" r="12"/><circle cx="100" cy="100" r="24"/><circle cx="100" cy="100" r="36"/>
+              <circle cx="100" cy="100" r="50"/><circle cx="100" cy="100" r="64"/><circle cx="100" cy="100" r="79"/><circle cx="100" cy="100" r="94"/>
+              <ellipse cx="100" cy="100" rx="42" ry="18" transform="rotate(30 100 100)"/>
+              <ellipse cx="100" cy="100" rx="42" ry="18" transform="rotate(90 100 100)"/>
+              <ellipse cx="100" cy="100" rx="42" ry="18" transform="rotate(150 100 100)"/>
+              <ellipse cx="100" cy="100" rx="70" ry="28" transform="rotate(30 100 100)"/>
+              <ellipse cx="100" cy="100" rx="70" ry="28" transform="rotate(90 100 100)"/>
+              <ellipse cx="100" cy="100" rx="70" ry="28" transform="rotate(150 100 100)"/>
+            </g>
+          </svg>
         </div>
-    </nav>
-
-    <!-- ── HERO ── -->
-    <section class="hero-gradient py-24 reveal">
-        <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-end">
-
-            <div>
-                <p class="eyebrow text-blue mb-5">Learning Experience Designer · EdTech · AI</p>
-                <h1 class="font-serif text-5xl md:text-6xl font-light leading-[1.07] text-text mb-5">
-                    Learning<br>that feels<br><em class="text-warm">alive</em>
-                </h1>
-                <p class="text-muted text-sm leading-relaxed max-w-sm mb-8">
-                    I design AI &amp; Data Science courses that non-technical learners actually finish — and use at work. 10+ years in EdTech, B2C &amp; B2G, globally.
-                </p>
-                <div class="flex gap-3 flex-wrap">
-                    <a href="#work"    class="btn-primary inline-block">See my work</a>
-                    <a href="#contact" class="btn-ghost   inline-block">Let's talk</a>
-                </div>
-            </div>
-
-            <div class="flex flex-col gap-4">
-                <div class="stat-card px-6 py-4 flex items-baseline gap-4">
-                    <span class="font-serif text-3xl font-light text-blue-light">10+</span>
-                    <span class="text-muted text-sm">years designing learning experiences</span>
-                </div>
-                <div class="stat-card px-6 py-4 flex items-baseline gap-4">
-                    <span class="font-serif text-3xl font-light text-blue-light">40+</span>
-                    <span class="text-muted text-sm">courses launched across AI, Data &amp; Design</span>
-                </div>
-                <div class="stat-card px-6 py-4 flex items-baseline gap-4">
-                    <span class="font-serif text-3xl font-light text-blue-light">1k+</span>
-                    <span class="text-muted text-sm">students impacted globally</span>
-                </div>
-            </div>
-
+      </div>
+      <div class="about-body reveal reveal-d2">
+        <p>I learned how to learn from a sound art course. Not because the curriculum was perfect — because the teacher was so genuinely alive in their subject that I caught it. A door opened. I got curious, started making things. That's when I understood: <strong>learning isn't transferred. It's ignited.</strong></p>
+        <p class="pull">It is literally impossible to build memories or make meaningful decisions without emotion.</p>
+        <p>Mary Helen Immordino-Yang put it in neurobiological terms. Most AI and Data Science courses for non-technical learners commit the exact error her research predicts will fail — they dump content without establishing why it matters <strong>to this person, in this life, right now.</strong> I've spent a decade watching people sit through polished modules, complete them, and retain almost nothing. Not because they weren't capable. Because nothing was asked of their intelligence.</p>
+        <p>Rancière has a name for this. He calls it stultification — and argues that the more carefully we explain, scaffold, and simplify, the more we communicate: <em>you cannot do this without me.</em> I work from the opposite assumption: <strong>the learner is already intelligent.</strong> My job is to design conditions where that becomes visible to them.</p>
+        <div class="pills-wrap">
+          <span class="pill-blue">Instructional Design</span>
+          <span class="pill-blue">AI/ML Curriculum</span>
+          <span class="pill-blue">Data Analytics</span>
+          <span class="pill-blue">LXD</span>
+          <span class="pill-blue">Project-Based Learning</span>
+          <span class="pill-warm">Somatic facilitation</span>
+          <span class="pill-warm">Art &amp; New Media</span>
+          <span class="pill-warm">SME collaboration</span>
+          <span class="pill-warm">AI-native workflow</span>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- ── ABOUT / IDENTITY ── -->
-    <section id="about" class="py-20">
-        <div class="max-w-5xl mx-auto px-6">
+<hr class="hairline">
 
-            <!-- Grid: label + body -->
-            <div class="grid md:grid-cols-[160px_1fr] gap-12 reveal">
-                <p class="eyebrow text-muted pt-1">About</p>
+<!-- ═══ APPROACH ═══ -->
+<section class="section-pad" id="approach" style="background:var(--bg-2);">
+  <div class="container">
+    <div class="overline reveal">My Approach</div>
+    <h2 class="section-hed reveal reveal-d1" style="margin-top:18px;">How I work</h2>
+    <div class="cards-wrap">
+      <div class="card reveal reveal-d1">
+        <div class="card-n">01 — Background</div>
+        <h3 class="card-hed">Unusual background,<br>on purpose.</h3>
+        <p class="card-p">Art pedagogy, somatic practice, Gestalt methodology, 10+ years building Data Science and AI/ML curricula for B2C platforms and B2G clients. The arts taught me that anyone who genuinely wants to learn something, can. My job is designing the conditions where that becomes true.</p>
+      </div>
+      <div class="card reveal reveal-d2">
+        <div class="card-n">02 — AI Workflow</div>
+        <h3 class="card-hed">AI in my workflow — not to cut corners.</h3>
+        <p class="card-p">I use ChatGPT, Claude, and NotebookLM daily — to move faster on structure so my attention stays where it matters: on why a learner would care, and whether the material makes that visible.</p>
+      </div>
+      <div class="card reveal reveal-d3">
+        <div class="card-n">03 — Embodied</div>
+        <h3 class="card-hed">The body knows things the slide deck can't say.</h3>
+        <p class="card-p">I'm training as a somatic therapist — working with how the body holds attention, stress, and memory. Two hours of passive content and your nervous system shuts down. Learning that connects to real stakes, real people, real problems — learns differently. That's what I design for.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-                <div class="identity-block p-8 md:p-10">
-                    <!-- Quote -->
-                    <blockquote class="quote-bar pl-5 mb-7">
-                        <p class="font-serif text-xl font-light italic text-warm leading-snug">
-                            "I believe the body knows things the slide deck can't say."
-                        </p>
-                    </blockquote>
+<hr class="hairline">
 
-                    <p class="text-muted text-sm leading-relaxed mb-8">
-                        Multidisciplinary Learning Experience Designer with a background in art, pedagogy, and somatic practice. I sit at the intersection of Learning Science, EdTech, and AI — I don't just write courses, I design experiences that change how people think. I use ChatGPT, Claude, and NotebookLM daily: AI cuts my production time, not my quality.
-                    </p>
+<!-- ═══ PORTFOLIO GRID ═══ -->
+<section class="section-pad" id="work" style="background:var(--bg);">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:64px;">
+      <div>
+        <div class="overline reveal">Work</div>
+        <h2 class="section-hed reveal reveal-d1" style="margin-top:18px;">10 years, four phases</h2>
+      </div>
+      <a href="#case1" style="font-size:13px;color:var(--blue);text-decoration:none;font-weight:400;">Case studies ↓</a>
+    </div>
 
-                    <!-- Skill pills -->
-                    <div class="flex flex-wrap gap-2">
-                        <span class="skill-pill-blue  text-xs px-3 py-1">Instructional Design</span>
-                        <span class="skill-pill-blue  text-xs px-3 py-1">AI/ML Curriculum</span>
-                        <span class="skill-pill-blue  text-xs px-3 py-1">Data Analytics courses</span>
-                        <span class="skill-pill-blue  text-xs px-3 py-1">LXD</span>
-                        <span class="skill-pill-blue  text-xs px-3 py-1">Project-Based Learning</span>
-                        <span class="skill-pill-warm  text-xs px-3 py-1">Somatic facilitation</span>
-                        <span class="skill-pill-warm  text-xs px-3 py-1">Art &amp; New Media</span>
-                        <span class="skill-pill-warm  text-xs px-3 py-1">SME collaboration</span>
-                        <span class="skill-pill-warm  text-xs px-3 py-1">AI-native workflow</span>
-                    </div>
+    <!-- Timeline -->
+    <div class="tl-wrap reveal">
 
-                    <!-- 3 mini cards -->
-                    <div class="grid sm:grid-cols-3 gap-4 mt-8">
-                        <div class="bg-surface2 rounded-xl p-5 border border-blue/10">
-                            <p class="font-serif text-2xl font-light text-blue-light mb-1">10+</p>
-                            <p class="text-xs text-muted">Years in EdTech — from Art Pedagogy to AI courses</p>
-                        </div>
-                        <div class="bg-surface2 rounded-xl p-5 border border-blue/10">
-                            <p class="font-serif text-2xl font-light text-blue-light mb-1">AI-native</p>
-                            <p class="text-xs text-muted">ChatGPT · Claude · NotebookLM in daily workflow</p>
-                        </div>
-                        <div class="bg-surface2 rounded-xl p-5 border border-blue/10">
-                            <p class="font-serif text-2xl font-light text-blue-light mb-1">Metric-led</p>
-                            <p class="text-xs text-muted">CSAT, retention &amp; ROI — not just content delivery</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+      <!-- Phase 1 -->
+      <div class="tl-phase">
+        <div class="tl-left">
+          <div class="tl-year">2020–2022</div>
+          <svg class="tl-wave" viewBox="0 0 48 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 10 C5 4,8 2,11 10 C14 18,17 16,20 10 C23 4,26 3,29 10 C32 17,35 15,38 10 C40 6,43 5,46 10" stroke="#C4A882" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <div class="tl-phase-label">Creative institutions<br>&amp; partnerships</div>
         </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- ── PORTFOLIO GRID ── -->
-    <section id="work" class="py-20">
-        <div class="max-w-5xl mx-auto px-6">
-
-            <div class="flex justify-between items-baseline mb-10 reveal">
-                <h2 class="font-serif text-3xl font-light text-text">Selected work</h2>
-                <a href="#case1" class="text-blue text-sm">Case studies ↓</a>
+        <div class="tl-right">
+          <div class="tl-row">
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-tag" style="color:#7A6040;background:rgba(196,168,130,0.12);border-color:rgba(196,168,130,0.3);">Art &amp; Design</span>
+                <span class="tl-scope">B2G · ~300 students</span>
+              </div>
+              <p class="tl-title">Rodchenko Art School — 15 professional programs + 10 short courses</p>
+              <div class="tl-metric-row">
+                <div class="tl-metric"><span class="tl-metric-val">75%</span><span class="tl-metric-lab">completion rate</span></div>
+                <div class="tl-metric"><span class="tl-metric-val">15</span><span class="tl-metric-lab">2-year programs</span></div>
+              </div>
             </div>
-
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 reveal">
-
-                <div class="case-card p-5">
-                    <span class="case-tag text-blue block mb-3">AI / ML</span>
-                    <p class="text-sm font-medium text-text mb-1 leading-snug">Prompt Engineering for Non-Developers</p>
-                    <p class="text-xs text-muted mb-4">Skillbox · 2024 · 12 modules</p>
-                    <div class="case-bar"><div class="case-bar-fill" style="width:92%;background:#378ADD;"></div></div>
-                </div>
-
-                <div class="case-card p-5">
-                    <span class="case-tag text-warm block mb-3">Data Science</span>
-                    <p class="text-sm font-medium text-text mb-1 leading-snug">Data Analytics: From Zero to Dashboard</p>
-                    <p class="text-xs text-muted mb-4">Skillbox · 2024 · 20 modules · 100% NPS</p>
-                    <div class="case-bar"><div class="case-bar-fill" style="width:100%;background:#C9B99A;"></div></div>
-                </div>
-
-                <div class="case-card p-5">
-                    <span class="case-tag text-blue block mb-3">AI Tools</span>
-                    <p class="text-sm font-medium text-text mb-1 leading-snug">AI Tools for Creatives — Midjourney &amp; GPT</p>
-                    <p class="text-xs text-muted mb-4">B2C · 2023 · 8 modules</p>
-                    <div class="case-bar"><div class="case-bar-fill" style="width:88%;background:#378ADD;"></div></div>
-                </div>
-
-                <div class="case-card p-5">
-                    <span class="case-tag text-blue block mb-3">Low-code / AI Dev</span>
-                    <p class="text-sm font-medium text-text mb-1 leading-snug">GPT Agents &amp; n8n for Business Automation</p>
-                    <p class="text-xs text-muted mb-4">Skillbox · 2025 · In progress</p>
-                    <div class="case-bar"><div class="case-bar-fill" style="width:55%;background:#378ADD;"></div></div>
-                </div>
-
-                <div class="case-card p-5">
-                    <span class="case-tag block mb-3" style="color:#5DCAA5;">Design</span>
-                    <p class="text-sm font-medium text-text mb-1 leading-snug">Interior Design: Process &amp; Critique</p>
-                    <p class="text-xs text-muted mb-4">Sreda · 2022 · 100 students</p>
-                    <div class="case-bar"><div class="case-bar-fill" style="width:95%;background:#5DCAA5;"></div></div>
-                </div>
-
-                <div class="case-card p-5 flex flex-col items-center justify-center min-h-[120px] border-dashed opacity-60 hover:opacity-100 transition cursor-pointer">
-                    <p class="text-xs text-muted text-center">Your next project<br><span class="text-blue">Let's build it →</span></p>
-                </div>
-
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-tag" style="color:#7A6040;background:rgba(196,168,130,0.12);border-color:rgba(196,168,130,0.3);">Immersive</span>
+                <span class="tl-scope">Multi-stakeholder · 200+ instructors</span>
+              </div>
+              <p class="tl-title">Cross-institutional publishing + VR course for artists</p>
+              <p class="tl-note">Nosorog Publishing · Rodchenko · Sreda Obuchenia — 1000+ students</p>
             </div>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <div class="divider"></div>
+      <div class="tl-divider">
+        <svg viewBox="0 0 1096 12" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+          <path d="M0 6 C60 2,90 10,150 6 C210 2,240 10,300 6 C360 2,420 10,480 6 C540 2,600 10,660 6 C720 2,780 10,840 6 C900 2,960 10,1020 6 C1060 2,1080 9,1096 6" stroke="rgba(26,24,20,0.10)" stroke-width="0.8" fill="none"/>
+        </svg>
+      </div>
 
-    <!-- ── CASE STUDY 1 ── -->
-    <section id="case1" class="py-20">
-        <div class="max-w-5xl mx-auto px-6">
-            <div class="reveal mb-12">
-                <p class="eyebrow text-blue mb-2">Case Study 01</p>
-                <h2 class="font-serif text-4xl font-light text-text">The "Product" Turnaround</h2>
-                <p class="text-muted text-sm mt-2">Higher Ed Product Relaunch · Skillbox (formerly Skillfactory)</p>
+      <!-- Phase 2 -->
+      <div class="tl-phase">
+        <div class="tl-left">
+          <div class="tl-year">2023–2024</div>
+          <svg class="tl-wave" viewBox="0 0 48 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 10 C6 5,9 5,13 10 C17 15,20 15,24 10 C28 5,31 5,35 10 C38 14,41 14,46 10" stroke="#2B58E8" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <div class="tl-phase-label">Commercial design<br>&amp; employment outcomes</div>
+        </div>
+        <div class="tl-right">
+          <div class="tl-row">
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-tag" style="color:var(--blue);background:var(--blue-dim);border-color:rgba(43,88,232,0.25);">Graphic Design</span>
+                <span class="tl-scope">B2C · SkillFactory</span>
+              </div>
+              <p class="tl-title">Graphic Design — industry case model, partner briefs</p>
+              <div class="tl-metric-row">
+                <div class="tl-metric"><span class="tl-metric-val" style="color:#2B58E8;">+70%</span><span class="tl-metric-lab">employment rate</span></div>
+              </div>
             </div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-tag" style="color:var(--teal);background:rgba(29,158,117,0.08);border-color:rgba(29,158,117,0.25);">Interior Design</span>
+                <span class="tl-scope">B2C · employment-focused</span>
+              </div>
+              <p class="tl-title">Interior Design Specialization — project-based, real commissions</p>
+              <p class="tl-note">Case-based model became repeatable pattern across B2C professional tracks</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-            <div class="grid lg:grid-cols-2 gap-10 reveal">
+      <div class="tl-divider">
+        <svg viewBox="0 0 1096 12" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+          <path d="M0 6 C60 2,90 10,150 6 C210 2,240 10,300 6 C360 2,420 10,480 6 C540 2,600 10,660 6 C720 2,780 10,840 6 C900 2,960 10,1020 6 C1060 2,1080 9,1096 6" stroke="rgba(26,24,20,0.10)" stroke-width="0.8" fill="none"/>
+        </svg>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="tl-phase">
+        <div class="tl-left">
+          <div class="tl-year">2023–now</div>
+          <svg class="tl-wave" viewBox="0 0 48 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 14 C5 10,7 8,10 6 C13 4,15 4,18 7 C21 10,23 12,26 10 C29 8,32 6,35 8 C38 10,41 11,46 8" stroke="#B04A28" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <div class="tl-phase-label">Master's programs<br>&amp; institutional scale</div>
+        </div>
+        <div class="tl-right">
+          <div class="tl-row">
+            <div class="tl-card tl-card-featured">
+              <div class="tl-card-top">
+                <span class="tl-tag" style="color:var(--blue);background:var(--blue-dim);border-color:rgba(43,88,232,0.25);">Product Management</span>
+                <span class="tl-scope">B2G · MIPT</span>
+              </div>
+              <p class="tl-title">MIPT Master's — Product Management program</p>
+              <div class="tl-metric-row">
+                <div class="tl-metric"><span class="tl-metric-val" style="color:#2B58E8;">95%</span><span class="tl-metric-lab">completion rate</span></div>
+                <div class="tl-metric"><span class="tl-metric-val" style="color:#2B58E8;">+75%</span><span class="tl-metric-lab">learner outcomes</span></div>
+              </div>
+            </div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-tag" style="color:#7A6040;background:rgba(196,168,130,0.12);border-color:rgba(196,168,130,0.3);">4 programs</span>
+                <span class="tl-scope">B2G · multiple institutions</span>
+              </div>
+              <p class="tl-title">RANEPA · SPbPU · Innopolis Game Design</p>
+              <p class="tl-note">Product &amp; Project Management · Game Design — across technical &amp; creative disciplines</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-divider">
+        <svg viewBox="0 0 1096 12" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+          <path d="M0 6 C60 2,90 10,150 6 C210 2,240 10,300 6 C360 2,420 10,480 6 C540 2,600 10,660 6 C720 2,780 10,840 6 C900 2,960 10,1020 6 C1060 2,1080 9,1096 6" stroke="rgba(26,24,20,0.10)" stroke-width="0.8" fill="none"/>
+        </svg>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="tl-phase">
+        <div class="tl-left">
+          <div class="tl-year">2024–now</div>
+          <svg class="tl-wave" viewBox="0 0 48 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="8" cy="10" r="2.5" stroke="#2B58E8" stroke-width="1"/>
+            <circle cx="8" cy="10" r="5.5" stroke="#2B58E8" stroke-width="0.7" opacity="0.6"/>
+            <circle cx="8" cy="10" r="8.5" stroke="#2B58E8" stroke-width="0.5" opacity="0.35"/>
+            <path d="M20 10 C23 6,26 5,29 10 C32 15,35 14,38 10 C40 7,43 7,46 10" stroke="#2B58E8" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <div class="tl-phase-label">B2C AI &amp; Data<br>at scale</div>
+        </div>
+        <div class="tl-right">
+          <div class="tl-row">
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-tag" style="color:var(--blue);background:var(--blue-dim);border-color:rgba(43,88,232,0.25);">AI / ML</span>
+                <span class="tl-scope">B2C · Skillbox · 3 tracks</span>
+              </div>
+              <p class="tl-title">AI literacy for creatives, business practitioners, developers</p>
+              <p class="tl-note">Same technical content, three completely different learner contexts — visual, operational, engineering</p>
+            </div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <span class="tl-tag" style="color:#7A6040;background:rgba(196,168,130,0.12);border-color:rgba(196,168,130,0.3);">Data Science</span>
+                <span class="tl-scope">B2C · dual-track · active</span>
+              </div>
+              <p class="tl-title">Data Analyst + ML Engineer specialization — active redesign</p>
+              <div class="tl-metric-row">
+                <div class="tl-metric"><span class="tl-metric-val" style="color:#2B58E8;">53→75</span><span class="tl-metric-lab">CSAT</span></div>
+                <div class="tl-metric"><span class="tl-metric-val" style="color:#2B58E8;">−45%</span><span class="tl-metric-lab">ops costs</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tl-wrap -->
+  </div>
+</section>
+
+<hr class="hairline">
+
+<!-- ═══ CASE STUDY 1 ═══ -->
+<section class="section-pad" id="case1" style="background:var(--bg);">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:52px;">
+      <div class="overline">Case Study 01</div>
+      <h2 class="section-hed" style="margin-top:18px;">From friction to flow:<br>redesigning a master's program</h2>
+      <p style="font-size:14px;color:var(--text-3);margin-top:10px;">IT Product Management Master's · Research University · Skillbox</p>
+    </div>
+
+    <div class="cs-grid-2 reveal">
+      <div>
+        <p class="cs-body-text" style="margin-bottom:28px;">A prestigious research university's Product Management master's program was underperforming. Students weren't completing assignments. Mentors were frustrated. Satisfaction scores were critically low — CSAT sat at 53. I joined as Learning Experience Designer with no prior background in product management. What I brought instead was structural thinking: how learning is supposed to be built, and where breakdowns happen between intention and outcome.</p>
+        <p class="cs-body-text" style="margin-bottom:28px;">The program was built around real outcomes — students were expected to graduate with working startup prototypes, not just grades. The stakes were high on both sides.</p>
+
+        <div class="cs-wave-label challenge" style="margin-bottom:12px;">
+          <svg width="28" height="14" viewBox="0 0 28 14" fill="none"><path d="M1 7 C3 3,5 1,7 7 C9 13,11 11,13 7 C15 3,17 2,19 7 C20 10,21 12,23 7 C24 4,26 3,27 7" stroke="#B04A28" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span>The diagnosis — three layers deep</span>
+        </div>
+        <div class="cs-list" style="margin-bottom:32px;">
+          <div class="cs-list-item"><span class="cs-list-arrow">·</span><p class="cs-list-text"><strong>Assignments were methodologically broken.</strong> Tasks didn't match the skill level being taught — students hit walls, mentors hit walls trying to explain them.</p></div>
+          <div class="cs-list-item"><span class="cs-list-arrow">·</span><p class="cs-list-text"><strong>Mentor onboarding didn't exist.</strong> Mentors were thrown into grading with no shared rubric, no clarity on expectations. Every cohort started from scratch.</p></div>
+          <div class="cs-list-item"><span class="cs-list-arrow">·</span><p class="cs-list-text"><strong>The cost model was invisible.</strong> Mentors were being paid for iterations that shouldn't have been necessary. Assignments created confusion loops, and every loop cost money.</p></div>
+        </div>
+
+        <div class="cs-wave-label solution" style="margin-bottom:12px;">
+          <svg width="28" height="14" viewBox="0 0 28 14" fill="none"><path d="M1 7 C4 4,6 4,9 7 C12 10,14 10,17 7 C20 4,22 4,25 7 C26 8,27 8.5,28 7" stroke="#2B58E8" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span>What changed</span>
+        </div>
+        <div class="cs-list">
+          <div class="cs-list-item"><span class="cs-list-arrow">·</span><p class="cs-list-text"><strong>Assignments rebuilt from scratch</strong> — clear success criteria, examples, scope limits. The confusion → resubmission → re-review cycle simply stopped.</p></div>
+          <div class="cs-list-item"><span class="cs-list-arrow">·</span><p class="cs-list-text"><strong>Mentor onboarding redesigned</strong> — shared rubrics, grading guides, escalation paths. Mentors stopped improvising.</p></div>
+          <div class="cs-list-item"><span class="cs-list-arrow">·</span><p class="cs-list-text"><strong>Financial audit + fix</strong> — analyzed budget spreadsheets line by line, identified duplicate review payments, restructured workflow so we paid once for work done once.</p></div>
+        </div>
+
+        <blockquote style="border-left:1.5px solid var(--blue);padding-left:20px;margin-top:32px;">
+          <p style="font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:17px;color:var(--text);line-height:1.5;">I wasn't just a methodologist on this project. I went into the budget tables, found where money was leaking, and redesigned the assignments so the leak stopped.</p>
+        </blockquote>
+      </div>
+
+      <div class="cs-box">
+        <p style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-3);margin-bottom:24px;">Before → After</p>
+
+        <div class="cs-result-row"><span class="cs-result-label">CSAT</span><span class="cs-result-val">53 → 75</span></div>
+        <div class="cs-result-row"><span class="cs-result-label">Completion rate</span><span class="cs-result-val">→ 95%</span></div>
+        <div class="cs-result-row"><span class="cs-result-label">Operational costs</span><span class="cs-result-val">−45%</span></div>
+        <div class="cs-result-row"><span class="cs-result-label">Mentor onboarding</span><span class="cs-result-val" style="font-size:15px;letter-spacing:0;">None → structured</span></div>
+        <div class="cs-result-row"><span class="cs-result-label">Assignment iterations</span><span class="cs-result-val" style="font-size:15px;letter-spacing:0;">Multiple → first-pass</span></div>
+        <div class="chart-container"><canvas id="nessaChart"></canvas></div>
+
+        <div style="margin-top:28px;padding-top:24px;border-top:0.5px solid var(--border);">
+          <p style="font-size:12px;color:var(--text-3);line-height:1.7;">The reason this worked: I didn't stay in my lane. Most learning designers fix the content. I fixed the content, the mentor system, and the financial structure — because all three were part of the same broken loop. Coming in as a domain outsider turned out to be an advantage: no assumptions about how product management "should" be taught, so the structural problems were visible.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="hairline">
+
+<!-- ═══ CASE STUDY 2 ═══ -->
+<section class="section-pad" id="case2" style="background:var(--bg-2);">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:52px;">
+      <div class="overline">Case Study 02</div>
+      <h2 class="section-hed" style="margin-top:18px;">Redesigning how Data Science<br>sounds to someone non-technical</h2>
+      <p style="font-size:14px;color:var(--text-3);margin-top:10px;">Data Science curriculum redesign · Skillbox · Ongoing</p>
+    </div>
+
+    <div class="cs-grid-2 reveal">
+      <div>
+        <p class="cs-body-text" style="margin-bottom:28px;">Data Science courses age fast. The technical content stays correct — but the way it's written stops working. Examples go stale, explanations assume context students don't have, and somewhere along the way the module stops feeling like it's talking to a person and starts feeling like a textbook nobody asked for.</p>
+
+        <div class="cs-wave-label challenge" style="margin-bottom:12px;">
+          <svg width="28" height="14" viewBox="0 0 28 14" fill="none"><path d="M1 7 C3 3,5 1,7 7 C9 13,11 11,13 7 C15 3,17 2,19 7 C20 10,21 12,23 7 C24 4,26 3,27 7" stroke="#B04A28" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span>The diagnosis</span>
+        </div>
+        <p class="cs-body-text" style="margin-bottom:24px;">The problem wasn't the information — it was the relationship between the information and the learner. Modules answered "what" and "how" but skipped "so what." And when you skip "so what," you lose people in the first paragraph. One pattern kept appearing in feedback: students weren't asking technical questions. They were asking <em>"when would I actually use this at work?"</em> The module had answered the wrong question for months. Nobody had noticed because nobody had looked at the feedback as a pattern — only as individual complaints.</p>
+
+        <div class="cs-wave-label solution" style="margin-bottom:12px;">
+          <svg width="28" height="14" viewBox="0 0 28 14" fill="none"><path d="M1 7 C4 4,6 4,9 7 C12 10,14 10,17 7 C20 4,22 4,25 7 C26 8,27 8.5,28 7" stroke="#2B58E8" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span>The method — three moves</span>
+        </div>
+        <div class="cs-list">
+          <div class="cs-list-item"><span class="cs-list-arrow">01</span><p class="cs-list-text"><strong>Listen before fixing.</strong> Student feedback through AI-assisted analysis first. Patterns surface fast: which explanations consistently confuse, which sections generate the same question over and over, where people quietly give up.</p></div>
+          <div class="cs-list-item"><span class="cs-list-arrow">02</span><p class="cs-list-text"><strong>Diagnose, then rewrite with context.</strong> The problematic module goes to AI with a specific brief: show me where a non-technical learner loses the thread. The output is a diagnosis, not a rewrite. Then I work — adding the business context the module was missing.</p></div>
+          <div class="cs-list-item"><span class="cs-list-arrow">03</span><p class="cs-list-text"><strong>Give experts a draft, not a blank page.</strong> The revised module goes to the SME with specific questions. They check a draft that's already 80% right — their time goes to precision, not production.</p></div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:0;">
+        <div class="cs-side-card blue-accent" style="margin-bottom:16px;">
+          <p class="cs-side-title">What one SME said</p>
+          <p class="cs-side-p" style="font-style:italic;">"He hadn't realized how much time he'd been spending explaining the same thing in Slack to students who'd already read the material. The questions stopped — not because the topic got easier, but because the module finally answered them before they had to ask."</p>
+        </div>
+        <div class="cs-side-card warm-accent" style="margin-bottom:16px;">
+          <p class="cs-side-title">On the numbers</p>
+          <p class="cs-side-p">No before/after metrics yet — redesigned modules still rolling out. Previous versions had satisfaction scores around 50. Target for new versions: 70–75. Based on structural changes made, that's realistic. I'll update when data comes in.</p>
+        </div>
+        <div class="cs-side-card teal-accent">
+          <p class="cs-side-title">The principle</p>
+          <p class="cs-side-p">I don't use AI to generate courses. I use it to see what I can't see alone — patterns in feedback, friction in text — and to free up the time I need to do the work that actually requires a human: understanding why a student would care, and making sure that answer is in the material before they have to ask.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="hairline">
+
+<!-- ═══ CASE STUDY 3 ═══ -->
+<section class="section-pad" id="case3" style="background:var(--bg);">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:52px;">
+      <div class="overline">Case Study 03</div>
+      <h2 class="section-hed" style="margin-top:18px;">What happens when you teach<br>someone to listen</h2>
+      <p style="font-size:14px;color:var(--text-3);margin-top:10px;">Sound Art · Online course + 1:1 mentorship · Independent practice</p>
+    </div>
+
+    <div class="cs-grid-2 reveal" style="gap:80px;">
+      <div>
+        <p class="cs-body-text" style="margin-bottom:28px;">Most people think they can't work with sound. They imagine expensive equipment, technical expertise, years of training. The real barrier is different: they've never been taught to actually listen. This course started from that assumption — and spent ten weeks proving it wrong.</p>
+
+        <div class="cs-wave-label solution" style="margin-bottom:14px;">
+          <svg width="28" height="14" viewBox="0 0 28 14" fill="none"><path d="M1 7 C4 4,6 4,9 7 C12 10,14 10,17 7 C20 4,22 4,25 7 C26 8,27 8.5,28 7" stroke="#2B58E8" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span>Three design decisions</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:20px;margin-bottom:32px;">
+          <div style="padding-left:18px;border-left:1px solid var(--border-2);">
+            <p style="font-size:13px;font-weight:400;color:var(--blue);margin-bottom:6px;letter-spacing:0.04em;">Cameras off — deliberately</p>
+            <p class="cs-body-text">An online session with twelve cameras on is a performance space. Nobody listens in a performance space — they manage how they look while listening. Visual attention and auditory attention compete. Remove one, and the other sharpens.</p>
+          </div>
+          <div style="padding-left:18px;border-left:1px solid var(--border-2);">
+            <p style="font-size:13px;font-weight:400;color:var(--blue);margin-bottom:6px;letter-spacing:0.04em;">Collective feedback as first act of creation</p>
+            <p class="cs-body-text">A student brings a sound fragment. Ten people open a shared Google Doc and write simultaneously: associations, images, questions. Nobody is critiquing. Everyone is responding. The document fills in real time and the student's work stops being a private experiment — it becomes a thing that exists in the world.</p>
+          </div>
+          <div style="padding-left:18px;border-left:1px solid var(--border-2);">
+            <p style="font-size:13px;font-weight:400;color:var(--blue);margin-bottom:6px;letter-spacing:0.04em;">Simplest possible entry point</p>
+            <p class="cs-body-text">No expensive equipment. No software learning curve. Here is how you begin working with sound using what you already have. The instructions were short because the territory was large — I wanted students moving through it, not studying the map.</p>
+          </div>
+        </div>
+
+        <blockquote style="border-left:1.5px solid var(--blue);padding-left:20px;margin-top:8px;">
+          <p style="font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:17px;color:var(--text);line-height:1.5;">Expanded perception is a legitimate learning outcome. It's also one of the harder ones to engineer — because it requires the designer to trust the learner's intelligence rather than manage their encounter with difficulty.</p>
+        </blockquote>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div class="cs-box" style="padding:32px;">
+          <p style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-3);margin-bottom:20px;">The 1:1 version</p>
+          <p class="cs-body-text" style="margin-bottom:16px;">A year of working with one person who came with no background in sound and an associative, non-linear way of thinking. Each session I tracked which ideas were connecting to which — not to direct, but to reflect back the pattern that was already forming. What looked like tangents turned out to be the actual material.</p>
+          <p class="cs-body-text">By the end: a wider perceptual range. She went to concerts and heard things she couldn't have heard before. Her listening changed — and with it, how she moved through her work.</p>
+        </div>
+
+        <!-- Artifacts block -->
+        <div>
+          <div class="overline" style="margin-bottom:16px;font-size:10px;">Artifacts</div>
+          <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;">
+
+            <!-- Album card -->
+            <a href="https://sredaobuchenia.bandcamp.com/album/15-20-space-home-edition" target="_blank" style="text-decoration:none;">
+              <div style="background:var(--bg-dark);border:0.5px solid rgba(43,88,232,0.30);border-radius:4px;padding:18px 20px;display:flex;align-items:flex-start;gap:16px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(43,88,232,0.65)'" onmouseout="this.style.borderColor='rgba(43,88,232,0.30)'">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style="flex-shrink:0;margin-top:2px;">
+                  <circle cx="14" cy="14" r="4" stroke="#5A82E8" stroke-width="1"/>
+                  <circle cx="14" cy="14" r="7.5" stroke="#5A82E8" stroke-width="0.8" opacity="0.65"/>
+                  <circle cx="14" cy="14" r="11" stroke="#5A82E8" stroke-width="0.6" opacity="0.38"/>
+                  <path d="M8 14 C10 10,11 9,13 14 C15 19,16 18,18 14 C19 11,20 11,22 14" stroke="#8AA8F0" stroke-width="0.9" stroke-linecap="round"/>
+                </svg>
                 <div>
-                    <div class="mb-7">
-                        <h4 class="text-sm font-medium mb-3" style="color:#f87171;">⚠ Challenge</h4>
-                        <p class="text-muted text-sm leading-relaxed">A high-stakes Data Science program for MIPT suffered from low engagement (CSAT 53.1) and high operational costs. Webinar attendance averaged 1–2 students per session.</p>
-                    </div>
-                    <div>
-                        <h4 class="text-sm font-medium text-blue mb-3">→ Solution</h4>
-                        <ul class="text-muted text-sm space-y-2 leading-relaxed">
-                            <li>· Identified disconnect between theory and real practice tasks</li>
-                            <li>· Shifted to Project-Based Learning — redesigned webinars from passive lectures into interactive workshops</li>
-                            <li>· Streamlined homework review — cut steps by 45% without losing quality</li>
-                        </ul>
-                    </div>
+                  <p style="font-size:13px;font-weight:400;color:#F0EDE8;margin-bottom:3px;">15:20 Space Home Edition</p>
+                  <p style="font-size:11px;color:rgba(240,237,232,0.45);line-height:1.4;margin-bottom:8px;">Album made by students · Faculty of Contemporary Art · Sreda Obuchenia</p>
+                  <span style="font-size:11px;color:#5A82E8;letter-spacing:0.06em;">Listen →</span>
                 </div>
+              </div>
+            </a>
 
-                <div class="identity-block p-7">
-                    <h3 class="text-sm font-medium text-muted mb-5 uppercase tracking-wider">Key results</h3>
-                    <div class="space-y-4 mb-6">
-                        <div class="flex justify-between items-center border-b border-white/5 pb-3">
-                            <span class="text-muted text-sm">Learner Satisfaction (CSAT)</span>
-                            <span class="result-num">+40.7%</span>
-                        </div>
-                        <div class="flex justify-between items-center border-b border-white/5 pb-3">
-                            <span class="text-muted text-sm">Webinar Attendance</span>
-                            <span class="result-num">10×</span>
-                        </div>
-                        <div class="flex justify-between items-center border-b border-white/5 pb-3">
-                            <span class="text-muted text-sm">Operational Costs</span>
-                            <span class="result-num">−45%</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-muted text-sm">Profitability</span>
-                            <span class="result-num">98.8%</span>
-                        </div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="nessaChart"></canvas>
-                    </div>
-                </div>
-            </div>
+            <!-- Press badge -->
+            <a href="https://www.colta.ru/articles/art/23033-saund-hudozhnitsa-mariya-molokova-o-rabote-sensornaya-deprivatsiya" target="_blank" style="text-decoration:none;">
+              <div style="background:transparent;border:0.5px solid var(--border-2);border-radius:4px;padding:12px 14px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(26,24,20,0.40)'" onmouseout="this.style.borderColor='var(--border-2)'">
+                <p style="font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--text-3);margin-bottom:4px;">Featured in</p>
+                <p style="font-size:13px;font-weight:400;color:var(--text);margin-bottom:3px;">Colta.ru</p>
+                <p style="font-size:11px;color:var(--text-3);line-height:1.4;">Interview on<br>sound art practice</p>
+              </div>
+            </a>
+
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- ── CASE STUDY 2 ── -->
-    <section id="case2" class="py-20" style="background:#1E2833;">
-        <div class="max-w-5xl mx-auto px-6">
-            <div class="reveal mb-12">
-                <p class="eyebrow text-warm mb-2">Case Study 02</p>
-                <h2 class="font-serif text-4xl font-light text-text">AI-Augmented Course Production</h2>
-                <p class="text-muted text-sm mt-2">AI Workflow Integration · Skillbox</p>
-            </div>
+<hr class="hairline">
 
-            <div class="grid md:grid-cols-2 gap-8 reveal">
-                <div class="bg-surface2 p-7 rounded-xl border border-blue/10">
-                    <h3 class="text-sm font-medium text-warm mb-5 uppercase tracking-wider">The workflow</h3>
-                    <ul class="space-y-5 text-muted text-sm">
-                        <li class="flex gap-3"><span class="text-blue mt-0.5 flex-shrink-0">→</span><div><strong class="text-text">ChatGPT</strong> — scripting, learning objective drafts, quiz generation. Cuts module outline time from ~4h to under 1h.</div></li>
-                        <li class="flex gap-3"><span class="text-blue mt-0.5 flex-shrink-0">→</span><div><strong class="text-text">Claude</strong> — instructional review and logic QA. Stress-tests course structure, checks cognitive load.</div></li>
-                        <li class="flex gap-3"><span class="text-blue mt-0.5 flex-shrink-0">→</span><div><strong class="text-text">NotebookLM</strong> — SME knowledge extraction from raw expert materials and interview transcripts.</div></li>
-                        <li class="flex gap-3"><span class="text-blue mt-0.5 flex-shrink-0">→</span><div><strong class="text-text">Team upskilling</strong> — led internal workshops on "AI in coordination and production."</div></li>
-                    </ul>
-                </div>
-
-                <div class="flex flex-col gap-4">
-                    <div class="bg-surface2 rounded-xl p-6 border-l-2 border-blue">
-                        <p class="text-sm font-medium text-text mb-1">Current projects</p>
-                        <p class="text-muted text-sm leading-relaxed">GPT Agents &amp; Make/n8n for business automation. AI for Developers with Cursor IDE. Designed for non-technical learners entering AI workflows.</p>
-                    </div>
-                    <div class="bg-surface2 rounded-xl p-6 border-l-2 border-warm">
-                        <p class="text-sm font-medium text-text mb-1">Result: Speed</p>
-                        <p class="text-muted text-sm leading-relaxed">AI-assisted production reduced module Time-to-Market — more modules shipped per sprint without adding headcount.</p>
-                    </div>
-                    <div class="bg-surface2 rounded-xl p-6 border-l-2" style="border-color:#5DCAA5;">
-                        <p class="text-sm font-medium text-text mb-1">Result: Culture</p>
-                        <p class="text-muted text-sm leading-relaxed">Shifted team mindset from "AI is a threat" to "AI is my co-producer" — practical adoption over hype.</p>
-                    </div>
-                </div>
-            </div>
+<!-- ═══ CASE STUDY 4 ═══ -->
+<section class="section-pad" id="case4" style="background:var(--bg-2);">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:52px;">
+      <div class="overline">Case Study 04</div>
+      <h2 class="section-hed" style="margin-top:18px;">Engagement &amp; Storytelling</h2>
+      <p style="font-size:14px;color:var(--text-3);margin-top:8px;">SME System &amp; Podcast Collaboration · Sreda Obuchenia</p>
+    </div>
+    <div class="cs-grid-3 reveal">
+      <div class="cs-card" style="background:var(--bg);">
+        <div class="cs-wave-label challenge">
+          <svg width="28" height="14" viewBox="0 0 28 14" fill="none"><path d="M1 7 C3 3,5 1,7 7 C9 13,11 11,13 7 C15 3,17 2,19 7 C20 10,21 12,23 7 C24 4,26 3,27 7" stroke="#B04A28" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span>Challenge</span>
         </div>
-    </section>
-
-    <!-- ── CASE STUDY 3 ── -->
-    <section id="case3" class="py-20">
-        <div class="max-w-5xl mx-auto px-6">
-            <div class="reveal mb-12">
-                <p class="eyebrow text-blue mb-2">Case Study 03</p>
-                <h2 class="font-serif text-4xl font-light text-text">Engagement &amp; Storytelling</h2>
-                <p class="text-muted text-sm mt-2">SME System &amp; Podcast Collaboration · Sreda Obuchenia</p>
-            </div>
-
-            <div class="grid lg:grid-cols-3 gap-5 reveal">
-                <div class="case-card p-6">
-                    <p class="text-sm font-medium mb-3" style="color:#f87171;">⚠ Challenge</p>
-                    <p class="text-muted text-sm leading-relaxed">Expert content was dry and disconnected from learner reality. SMEs were burnt out. Webinar attendance: 1–2 students per session.</p>
-                </div>
-                <div class="case-card p-6">
-                    <p class="text-sm font-medium text-blue mb-3">→ Solution</p>
-                    <p class="text-muted text-sm leading-relaxed">Collaborated with "Either/Or" (Libo-Libo) podcast to blend technical theory with personal storytelling. Designed structured onboarding for SMEs so they could teach without burning out.</p>
-                </div>
-                <div class="case-card p-6" style="border-color: rgba(201,185,154,0.35);">
-                    <p class="text-sm font-medium text-warm mb-3">★ Results</p>
-                    <p class="text-muted text-sm mb-3"><span class="font-serif text-2xl text-warm font-light">100%</span> Author NPS — maintained across all SMEs.</p>
-                    <p class="text-muted text-sm">Webinar attendance: <span class="text-text font-medium">1–2 → 15–20</span> students/session.</p>
-                </div>
-            </div>
+        <p class="cs-body-text">Expert content was dry and disconnected from learner reality. SMEs were burnt out. Webinar attendance: 1–2 students per session.</p>
+      </div>
+      <div class="cs-card" style="background:var(--bg);">
+        <div class="cs-wave-label solution">
+          <svg width="28" height="14" viewBox="0 0 28 14" fill="none"><path d="M1 7 C4 4,6 4,9 7 C12 10,14 10,17 7 C20 4,22 4,25 7 C26 8,27 8.5,28 7" stroke="#2B58E8" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span>Solution</span>
         </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- ── GLOBAL ── -->
-    <section id="global" class="py-20" style="background:#1E2833;">
-        <div class="max-w-5xl mx-auto px-6 reveal">
-            <div class="mb-10">
-                <p class="eyebrow text-muted mb-2">Global experience</p>
-                <h2 class="font-serif text-3xl font-light text-text">English &amp; International</h2>
-            </div>
-            <div class="grid md:grid-cols-2 gap-5 mb-8">
-                <div class="bg-surface2 rounded-xl p-7 border border-blue/10">
-                    <p class="text-blue text-sm font-medium mb-2">US Market Research</p>
-                    <p class="text-muted text-sm leading-relaxed">Deep competitor research (Udemy, Domestika, Coursera) for a US-focused design course — validated product-market fit and pricing strategy.</p>
-                </div>
-                <div class="bg-surface2 rounded-xl p-7 border border-blue/10">
-                    <p class="text-blue text-sm font-medium mb-2">EU Collaboration</p>
-                    <p class="text-muted text-sm leading-relaxed">Managed an exhibition project in Barcelona, navigating cultural differences and coordinating full production in English with international teams.</p>
-                </div>
-            </div>
-            <div class="flex gap-3 flex-wrap">
-                <span class="skill-pill-blue text-xs px-4 py-1.5">Bilingual content EN/RU</span>
-                <span class="skill-pill-warm text-xs px-4 py-1.5">Based in Montenegro · Remote-first</span>
-            </div>
+        <p class="cs-body-text">Collaborated with "Either/Or" (Libo-Libo) podcast to blend technical theory with personal storytelling. Designed structured onboarding for SMEs so they could teach without burning out.</p>
+      </div>
+      <div class="cs-card" style="background:var(--bg);">
+        <div class="cs-wave-label result">
+          <svg width="28" height="14" viewBox="0 0 28 14" fill="none">
+            <circle cx="14" cy="7" r="2" stroke="#7A6040" stroke-width="1"/>
+            <circle cx="14" cy="7" r="4.5" stroke="#7A6040" stroke-width="0.8" opacity="0.7"/>
+            <circle cx="14" cy="7" r="7" stroke="#7A6040" stroke-width="0.6" opacity="0.45"/>
+          </svg>
+          <span>Results</span>
         </div>
-    </section>
+        <p class="cs-body-text" style="margin-bottom:14px;"><span style="font-family:'Fraunces',serif;font-size:28px;font-weight:300;color:#8B6F52;letter-spacing:-0.02em;">100%</span> Author NPS — across all SMEs.</p>
+        <p class="cs-body-text">Webinar attendance: <strong style="color:var(--text);font-weight:400;">1–2 → 15–20</strong> students/session.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <div class="divider"></div>
+<hr class="hairline">
 
-    <!-- ── TESTIMONIALS ── -->
-    <section id="testimonials" class="py-20">
-        <div class="max-w-5xl mx-auto px-6">
-            <div class="reveal mb-10">
-                <p class="eyebrow text-muted mb-2">Peer reviews</p>
-                <h2 class="font-serif text-3xl font-light text-text">What people say</h2>
-            </div>
-            <div class="grid md:grid-cols-3 gap-5 reveal">
+<!-- ═══ GLOBAL ═══ -->
+<section class="section-pad" id="global" style="background:var(--bg-2);">
+  <div class="container reveal">
+    <div class="overline">Global experience</div>
+    <h2 class="section-hed" style="margin-top:18px;">English &amp; International</h2>
+    <div class="global-cards">
+      <div class="global-card">
+        <p class="global-card-title">US Market Research</p>
+        <p style="font-size:15px;color:var(--text-2);line-height:1.68;">Deep competitor research (Udemy, Domestika, Coursera) for a US-focused design course — validated product-market fit and pricing strategy.</p>
+      </div>
+      <div class="global-card" style="background:var(--bg);">
+        <p class="global-card-title">EU Collaboration</p>
+        <p style="font-size:15px;color:var(--text-2);line-height:1.68;">Managed an exhibition project in Barcelona, navigating cultural differences and coordinating full production in English with international teams.</p>
+      </div>
+    </div>
+    <div class="pills-wrap" style="margin-top:28px;">
+      <span class="pill-blue">Bilingual content EN / RU</span>
+      <span class="pill-warm">Based in Montenegro · Remote-first</span>
+    </div>
+  </div>
+</section>
 
-                <div id="t1" class="tcard p-6">
-                    <div class="t-preview">
-                        <p class="italic text-muted text-sm">"Masha, it's a pleasure working with you — structured, consistent, responsible..."</p>
-                    </div>
-                    <div class="t-full hidden">
-                        <p class="italic text-muted text-sm">"Masha, it's a pleasure working with you — structured, consistent, responsible. You gave clear and actionable feedback on my materials, and I always felt that you genuinely cared about the quality of the course, not just hitting deadlines. Working with you made me feel like a real author, not just someone filling a template."</p>
-                    </div>
-                    <div class="mt-5 border-t border-white/5 pt-4">
-                        <p class="text-sm font-medium text-text">Ulyana Yarygina</p>
-                        <p class="text-xs text-muted">Interior Design Expert · Skillbox</p>
-                    </div>
-                    <button class="read-more-btn mt-3 text-xs text-blue border border-blue/20 px-3 py-1 rounded-full hover:bg-blue/10 transition" onclick="toggleTestimonial('t1')">Read Full Testimonial ↓</button>
-                </div>
+<hr class="hairline">
 
-                <div id="t2" class="tcard p-6">
-                    <div class="t-preview">
-                        <p class="italic text-muted text-sm">"I worked with Maria on a job search course — it's a 100% match. Masha is incredibly systemic..."</p>
-                    </div>
-                    <div class="t-full hidden">
-                        <p class="italic text-muted text-sm">"I worked with Maria on a job search course, and it's a 100% match. Masha is incredibly systemic — she structures complex material in a way that feels natural and never overwhelming. She also has a rare quality: she asks the right questions to draw out expertise that I didn't even know I had."</p>
-                    </div>
-                    <div class="mt-5 border-t border-white/5 pt-4">
-                        <p class="text-sm font-medium text-text">Maria Bobyleva</p>
-                        <p class="text-xs text-muted">HR Business Partner · Course Author</p>
-                    </div>
-                    <button class="read-more-btn mt-3 text-xs text-blue border border-blue/20 px-3 py-1 rounded-full hover:bg-blue/10 transition" onclick="toggleTestimonial('t2')">Read Full Testimonial ↓</button>
-                </div>
-
-                <div id="t3" class="tcard p-6">
-                    <div class="t-preview">
-                        <p class="italic text-muted text-sm">"Working with Masha was a pure pleasure — everything was clear, structured, and to the point..."</p>
-                    </div>
-                    <div class="t-full hidden">
-                        <p class="italic text-muted text-sm">"Working with Masha was a pure pleasure — everything was clear, structured, and to the point. She helped me translate my visual practice into a course that actually teaches, not just inspires. Her feedback was always kind but precise. I never felt lost in the process."</p>
-                    </div>
-                    <div class="mt-5 border-t border-white/5 pt-4">
-                        <p class="text-sm font-medium text-text">Alina Panshina</p>
-                        <p class="text-xs text-muted">Illustrator &amp; Course Author</p>
-                    </div>
-                    <button class="read-more-btn mt-3 text-xs text-blue border border-blue/20 px-3 py-1 rounded-full hover:bg-blue/10 transition" onclick="toggleTestimonial('t3')">Read Full Testimonial ↓</button>
-                </div>
-
-            </div>
+<!-- ═══ SME / AUTHORS ═══ -->
+<section class="section-pad" id="authors" style="background:var(--bg-2);">
+  <div class="container">
+    <div class="sme-grid">
+      <div>
+        <div class="sme-hed-wrap">
+          <div class="overline reveal">Working with authors</div>
+          <h2 class="section-hed reveal reveal-d1" style="margin-top:18px;">Your expertise.<br>Shaped to land.</h2>
+          <svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" style="width:160px;height:160px;margin-top:48px;" class="deco-cymatics" aria-hidden="true">
+            <g fill="none" stroke="#1A1814" stroke-width="1.1">
+              <circle cx="90" cy="90" r="8"/><circle cx="90" cy="90" r="18"/><circle cx="90" cy="90" r="30"/>
+              <circle cx="90" cy="90" r="44"/><circle cx="90" cy="90" r="58"/><circle cx="90" cy="90" r="73"/>
+              <line x1="17" y1="90" x2="163" y2="90" stroke-width="0.5"/>
+              <line x1="90" y1="17" x2="90" y2="163" stroke-width="0.5"/>
+              <line x1="38" y1="38" x2="142" y2="142" stroke-width="0.4"/>
+              <line x1="142" y1="38" x2="38" y2="142" stroke-width="0.4"/>
+            </g>
+          </svg>
         </div>
-    </section>
+      </div>
+      <div class="sme-body reveal reveal-d2">
+        <p>If you're an expert, practitioner, or educator who wants to turn your knowledge into a course — but doesn't know where to start, feels stuck in the structure, or just needs someone to think alongside — <strong>that's exactly where I work best.</strong></p>
+        <p>I help authors shape raw expertise into learning experiences that actually land. That means: <strong>extracting what matters from what you know</strong>, building sequences that learners can follow, and giving feedback that moves things forward without flattening your voice.</p>
+        <p class="sme-cta-note">Available for consulting, course co-development, and SME collaboration. One conversation is enough to figure out if we're a good fit.</p>
 
-    <div class="divider"></div>
-
-    <!-- ── CONTACT ── -->
-    <section id="contact" class="py-20">
-        <div class="max-w-5xl mx-auto px-6">
-            <div class="grid md:grid-cols-2 gap-14 items-start reveal">
-
-                <div>
-                    <p class="eyebrow text-muted mb-4">Contact</p>
-                    <h2 class="font-serif text-4xl font-light text-text leading-snug mb-4">
-                        Let's create something<br><em class="text-warm">worth learning</em>
-                    </h2>
-                    <p class="text-muted text-sm leading-relaxed mb-8">
-                        Open to full-time roles and freelance projects in global EdTech — especially teams building AI literacy, Data Science, or tech-skills programs at scale.
-                    </p>
-                    <div class="flex flex-col gap-3">
-                        <a href="mailto:molokova1@gmail.com" class="flex items-center gap-3 text-sm text-muted hover:text-blue-light transition">
-                            <span class="w-1.5 h-1.5 rounded-full bg-blue flex-shrink-0"></span>
-                            molokova1@gmail.com
-                        </a>
-                        <a href="https://www.linkedin.com/in/mariamolokova/" target="_blank" class="flex items-center gap-3 text-sm text-muted hover:text-blue-light transition">
-                            <span class="w-1.5 h-1.5 rounded-full bg-blue flex-shrink-0"></span>
-                            linkedin.com/in/mariamolokova
-                        </a>
-                        <span class="flex items-center gap-3 text-sm text-muted">
-                            <span class="w-1.5 h-1.5 rounded-full bg-warm flex-shrink-0"></span>
-                            Montenegro · Remote-first · EN / RU
-                        </span>
-                    </div>
-                </div>
-
-                <form action="https://formspree.io/f/mgopvbpl" method="POST" class="flex flex-col gap-3" id="contact-form">
-                    <input  class="form-input" type="text"  name="name"    placeholder="Your name" required>
-                    <input  class="form-input" type="email" name="email"   placeholder="Email" required>
-                    <textarea class="form-input" name="message" style="height:100px;resize:none;" placeholder="What are you working on?" required></textarea>
-                    <button type="submit" class="btn-primary self-start" id="submit-btn">Send message</button>
-                    <p id="form-success" style="display:none; color:#85B7EB; font-size:13px;">✓ Message sent! I'll get back to you soon.</p>
-                    <p id="form-error"   style="display:none; color:#f87171; font-size:13px;">Something went wrong — please email me directly.</p>
-                </form>
-                <script>
-                    document.getElementById('contact-form').addEventListener('submit', async function(e) {
-                        e.preventDefault();
-                        const btn = document.getElementById('submit-btn');
-                        btn.textContent = 'Sending…';
-                        btn.disabled = true;
-                        try {
-                            const res = await fetch(this.action, {
-                                method: 'POST',
-                                body: new FormData(this),
-                                headers: { 'Accept': 'application/json' }
-                            });
-                            if (res.ok) {
-                                this.reset();
-                                document.getElementById('form-success').style.display = 'block';
-                                btn.style.display = 'none';
-                            } else {
-                                throw new Error();
-                            }
-                        } catch {
-                            document.getElementById('form-error').style.display = 'block';
-                            btn.textContent = 'Send message';
-                            btn.disabled = false;
-                        }
-                    });
-                </script>
-
-            </div>
+        <div class="sme-testimonials">
+          <div class="sme-testi">
+            <div class="sme-testi-quote">My stream of thoughts and extensive practical experience — you packaged it into a clear structure and meaning. Gentle reminders and soft feedback helped me move forward with more energy. And you noticed when the pace was getting too much for me, and proposed a solution that gave me space to breathe. This was my first experience working with a methodologist — and it was WOW.</div>
+            <div class="testi-author"><div class="testi-avatar">LO</div><div><div class="testi-name">Lyudmila Orlova</div><div class="testi-role">Commercial Director</div></div></div>
+          </div>
+          <div class="sme-testi">
+            <div class="sme-testi-quote">You can trust her with the methodological work while leaving the author enough space for creativity.</div>
+            <div class="testi-author"><div class="testi-avatar">AP</div><div><div class="testi-name">Alina Panshina</div><div class="testi-role">Illustrator</div></div></div>
+          </div>
+          <div class="sme-testi">
+            <div class="sme-testi-quote">She found the perfect balance between the necessary informativeness of the material and the author's voice. The result is precise, well-structured content that's easy to deliver to students.</div>
+            <div class="testi-author"><div class="testi-avatar">MP</div><div><div class="testi-name">Maria Panova</div><div class="testi-role">Interior Designer</div></div></div>
+          </div>
+          <div class="sme-testi">
+            <div class="sme-testi-quote">The format was always win-win — she hears the need and knows how to reach a shared result through genuinely partnership-based communication. I was constantly impressed by her speed — both in responding and in editing.</div>
+            <div class="testi-author"><div class="testi-avatar">MB</div><div><div class="testi-name">Maria Bobyleva</div><div class="testi-role">Career Consultant &amp; HR Business Partner</div></div></div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- ── FOOTER ── -->
-    <footer class="py-8">
-        <div class="max-w-5xl mx-auto px-6 flex justify-between items-center">
-            <span class="text-xs text-muted">© 2025 Maria Molokova · LXD &amp; AI Learning Strategist</span>
-            <span class="font-serif text-base font-light text-muted">MM<span class="text-warm">.</span></span>
+<!-- ═══ CONTACT ═══ -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="overline">Contact</div>
+    <h2 class="contact-hed">Let's build something<br>genuinely good.</h2>
+    <div class="contact-grid">
+      <div>
+        <p class="contact-sub">A real idea, moved fast, iterated honestly — with everything we know about how humans actually learn brought to bear on making it land. Open to full-time roles and freelance projects in global EdTech — especially teams building AI literacy, Data Science, or tech-skills programs for people who don't think of themselves as technical.</p>
+        <a href="mailto:molokova1@gmail.com" class="contact-info-row">
+          <span class="contact-dot" style="background:var(--blue);"></span>
+          molokova1@gmail.com
+        </a>
+        <a href="https://www.linkedin.com/in/mariamolokova/" target="_blank" class="contact-info-row">
+          <span class="contact-dot" style="background:var(--blue);"></span>
+          linkedin.com/in/mariamolokova
+        </a>
+        <span class="contact-info-row">
+          <span class="contact-dot" style="background:#C4A882;"></span>
+          Montenegro · Remote-first · EN / RU
+        </span>
+      </div>
+
+      <form action="https://formspree.io/f/mgopvbpl" method="POST" class="form-wrap" id="contact-form">
+        <input class="form-input" type="text" name="name" placeholder="Your name" required>
+        <input class="form-input" type="email" name="email" placeholder="Email" required>
+        <textarea class="form-input" name="message" style="height:110px;resize:none;" placeholder="What are you working on?" required></textarea>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <button type="submit" class="btn-pale" id="submit-btn">Send message</button>
+          <a href="mailto:molokova1@gmail.com" class="btn-ghost">Email me directly</a>
         </div>
-    </footer>
+        <p id="form-success" style="display:none;color:#A8D4C0;font-size:13px;margin-top:4px;">✓ Message sent! I'll get back to you soon.</p>
+        <p id="form-error"   style="display:none;color:#F0907A;font-size:13px;margin-top:4px;">Something went wrong — please email me directly.</p>
+      </form>
+    </div>
+
+    <div class="footer-line">
+      <span class="footer-copy">© 2025 Maria Molokova · LXD &amp; AI Learning Strategist</span>
+      <div class="footer-links">
+        <a href="https://molokova.github.io/pf/" target="_blank">Portfolio</a>
+        <a href="https://linkedin.com/in/mariamolokova/" target="_blank">LinkedIn</a>
+        <a href="mailto:molokova1@gmail.com">molokova1@gmail.com</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script>
+/* Formspree async */
+document.getElementById('contact-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Sending…'; btn.disabled = true;
+  try {
+    const res = await fetch(this.action, { method:'POST', body:new FormData(this), headers:{'Accept':'application/json'} });
+    if (res.ok) {
+      this.reset();
+      document.getElementById('form-success').style.display = 'block';
+      btn.style.display = 'none';
+    } else { throw new Error(); }
+  } catch {
+    document.getElementById('form-error').style.display = 'block';
+    btn.textContent = 'Send message'; btn.disabled = false;
+  }
+});
+
+/* Testimonial toggle */
+function toggleT(id) {
+  const card = document.getElementById(id);
+  const preview = card.querySelector('.t-preview');
+  const full    = card.querySelector('.t-full');
+  const btn     = card.querySelector('.read-more-btn');
+  const hidden  = full.style.display === 'none';
+  full.style.display    = hidden ? 'block' : 'none';
+  preview.style.display = hidden ? 'none'  : 'block';
+  btn.textContent       = hidden ? 'Read less ↑' : 'Read full testimonial ↓';
+}
+
+/* Chart.js — CSAT */
+document.addEventListener('DOMContentLoaded', () => {
+  new Chart(document.getElementById('nessaChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['Before', 'After'],
+      datasets: [{
+        label: 'CSAT',
+        data: [53.1, 74.7],
+        backgroundColor: ['rgba(26,24,20,0.08)', 'rgba(43,88,232,0.80)'],
+        borderColor:     ['rgba(26,24,20,0.18)', 'rgba(43,88,232,1)'],
+        borderWidth: 1, borderRadius: 3
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, max: 100, grid: { color:'rgba(26,24,20,0.06)' }, ticks:{ color:'#8A8680', font:{size:11} } },
+        x: { grid: { display: false }, ticks:{ color:'#8A8680', font:{size:11} } }
+      }
+    }
+  });
+});
+
+/* Scroll reveal */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+}, { threshold: 0.10 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+<!-- WebGL holographic blob -->
+<script>
+(function() {
+  const canvas = document.getElementById('holo-canvas');
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vert = `attribute vec2 a_pos; void main(){gl_Position=vec4(a_pos,0.,1.);}`;
+  const frag = `
+    precision highp float;
+    uniform float u_time;
+    uniform vec2 u_res;
+    float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+    float noise(vec2 p){
+      vec2 i=floor(p),f=fract(p);
+      f=f*f*(3.-2.*f);
+      return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);
+    }
+    float fbm(vec2 p){
+      float v=0.,a=0.5;
+      for(int i=0;i<6;i++){v+=a*noise(p);p=p*2.02+vec2(3.1,1.7);a*=0.48;}
+      return v;
+    }
+    vec3 palette(float t){
+      t=fract(t);
+      vec3 c[6];
+      c[0]=vec3(0.925,0.618,0.672);
+      c[1]=vec3(0.627,0.725,0.863);
+      c[2]=vec3(0.975,0.965,0.985);
+      c[3]=vec3(0.784,0.627,0.843);
+      c[4]=vec3(0.863,0.588,0.314);
+      c[5]=vec3(0.925,0.618,0.672);
+      float s=t*5.;
+      int idx=int(s);
+      float fr=fract(s);
+      vec3 a,b;
+      if(idx==0){a=c[0];b=c[1];}
+      else if(idx==1){a=c[1];b=c[2];}
+      else if(idx==2){a=c[2];b=c[3];}
+      else if(idx==3){a=c[3];b=c[4];}
+      else{a=c[4];b=c[5];}
+      return mix(a,b,smoothstep(0.,1.,fr));
+    }
+    void main(){
+      vec2 uv=gl_FragCoord.xy/u_res;
+      float t=u_time*0.038;
+      vec2 p=uv*2.8;
+      float n1=fbm(p+t);
+      float n2=fbm(p+vec2(n1*1.2,n1*0.9)+t*0.65);
+      float n3=fbm(p*1.4+vec2(n2*0.9,n2*1.1)-t*0.45);
+      float val=n1*0.45+n2*0.35+n3*0.20;
+      float bands=val*9.;
+      float f=fract(bands);
+      float edge=min(f,1.-f);
+      float line=1.-smoothstep(0.,0.055,edge);
+      vec3 color=palette(val*0.72+0.08);
+      color=mix(color,vec3(1.),line*0.88);
+      vec2 d=uv-.5;
+      float vig=1.-.18*dot(d,d)*4.;
+      color*=clamp(vig,0.82,1.);
+      gl_FragColor=vec4(color,1.);
+    }
+  `;
+  function mkShader(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
+  const prog=gl.createProgram();
+  gl.attachShader(prog,mkShader(gl.VERTEX_SHADER,vert));
+  gl.attachShader(prog,mkShader(gl.FRAGMENT_SHADER,frag));
+  gl.linkProgram(prog);gl.useProgram(prog);
+  const buf=gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+  const aPos=gl.getAttribLocation(prog,'a_pos');
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
+  const uTime=gl.getUniformLocation(prog,'u_time');
+  const uRes=gl.getUniformLocation(prog,'u_res');
+  gl.uniform2f(uRes,canvas.width,canvas.height);
+  let start=null;
+  function render(ts){if(!start)start=ts;gl.uniform1f(uTime,(ts-start)*.001);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);requestAnimationFrame(render);}
+  requestAnimationFrame(render);
+})();
+</script>
+
 
 </body>
 </html>
